@@ -13,13 +13,16 @@ namespace Editor
         private UnityEditor.Editor _shapeEditor;
         private UnityEditor.Editor _colourEditor;
 
-        private bool _autoUpdate = true;
-        private bool _shapeFoldout = true;
-        private bool _colorFoldout = true;
+        [SerializeField]
+        private bool _autoUpdate;
+
+        private static bool _shapeFoldout;
+        private static bool _colorFoldout;
 
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
+            _autoUpdate = false;
 
             GUILayout.Space(20);
 
@@ -27,7 +30,7 @@ namespace Editor
                 ref _shapeEditor);
             DrawSettingsEditor(_planet.colorSettings, _planet.OnColorSettingsUpdated, ref _colorFoldout,
                 ref _colourEditor);
-            
+
             GUILayout.Space(20);
 
             if (GUILayout.Button("Generate Planet"))
@@ -35,10 +38,10 @@ namespace Editor
                 _planet.GeneratePlanet();
             }
 
-            if (_autoUpdate = GUILayout.Toggle(_autoUpdate, "Auto Update"))
+            /*if (_autoUpdate = GUILayout.Toggle(_autoUpdate, "Auto Update"))
             {
                 _planet.GeneratePlanet();
-            }
+            }*/
         }
 
         private void DrawSettingsEditor(Object settings, Action onSettingUpdated, ref bool foldout,

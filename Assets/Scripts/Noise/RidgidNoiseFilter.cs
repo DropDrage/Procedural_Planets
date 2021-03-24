@@ -2,15 +2,15 @@ using UnityEngine;
 
 namespace Noise
 {
-    public class RidgidNoiseFilter: NoiseFilterAbstract
+    public class RidgidNoiseFilter : NoiseFilterAbstract
     {
-        protected NoiseSettings.RigidNoiseSettings _settings;
+        private NoiseSettings.RigidNoiseSettings _settings;
 
         public RidgidNoiseFilter(NoiseSettings.RigidNoiseSettings settings)
         {
             _settings = settings;
         }
-        
+
         public override float Evaluate(Vector3 point)
         {
             var frequency = _settings.baseRoughness;
