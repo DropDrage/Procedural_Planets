@@ -6,7 +6,7 @@ namespace Editor
     [CustomEditor(typeof(PlanetSystemGenerator))]
     public class PlanetSystemGeneratorEditor : UnityEditor.Editor
     {
-        private PlanetSystemGenerator generator;
+        private PlanetSystemGenerator _generator;
 
         public override void OnInspectorGUI()
         {
@@ -14,14 +14,14 @@ namespace Editor
 
             if (GUILayout.Button("Generate"))
             {
-                generator.Generate();
+                _generator.Generate();
             }
         }
 
 
         private void OnEnable()
         {
-            generator = target as PlanetSystemGenerator;
+            _generator = target as PlanetSystemGenerator;
         }
     }
 }

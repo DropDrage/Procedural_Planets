@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour
 {
-    private readonly ShapeGenerator _shapeGenerator = new ShapeGenerator();
+    protected readonly ShapeGenerator ShapeGenerator = new ShapeGenerator();
     private readonly ColorGenerator _colorGenerator = new ColorGenerator();
 
     [Range(2, 256)]
@@ -23,16 +23,13 @@ public class Planet : MonoBehaviour
     [SerializeField, HideInInspector]
     private MeshFilter[] meshFilters;
 
-    private TerrainFace[] _terrainFaces;
+    protected TerrainFace[] TerrainFaces;
 
     private SphereCollider _sphereCollider;
-
-    [SerializeField] private Vector3 spawnPoint;
 
 
     private void Start()
     {
-        spawnPoint = transform.position;
         _sphereCollider = GetComponent<SphereCollider>();
         GeneratePlanet();
     }
@@ -60,7 +57,7 @@ public class Planet : MonoBehaviour
 
     private void Initialize()
     {
-        _shapeGenerator.UpdateSettings(shapeSettings);
+        ShapeGenerator.UpdateSettings(shapeSettings);
         _colorGenerator.UpdateSettings(colorSettings);
 
         if (_sphereCollider == null)
@@ -76,7 +73,7 @@ public class Planet : MonoBehaviour
             meshFilters = new MeshFilter[6];
         }
 
-        _terrainFaces = new TerrainFace[6];
+        TerrainFaces = new TerrainFace[6];
 
         var directions = new[]
         {
@@ -90,7 +87,7 @@ public class Planet : MonoBehaviour
                 var transform1 = transform;
                 var meshObj = transform1.childCount > i && transform1.GetChild(i).gameObject
                     ? transform1.GetChild(i).gameObject
-                    : new GameObject($"mesh{i}");
+                    : new GameObject($"mesh{(FaceRenderMask) i + 1}");
                 meshObj.transform.parent = transform1;
                 meshObj.transform.position = transform1.position;
 
@@ -102,31 +99,40 @@ public class Planet : MonoBehaviour
 
             meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = colorSettings.planetMaterial;
 
-            _terrainFaces[i] = new TerrainFace(_shapeGenerator, meshFilters[i].sharedMesh, resolution, directions[i]);
+            TerrainFaces[i] = CreateTerrainFace(meshFilters[i].sharedMesh, directions[i]);
             var renderFace = faceRenderMask == FaceRenderMask.All || (int) faceRenderMask - 1 == i;
             meshFilters[i].gameObject.SetActive(renderFace);
         }
     }
 
+    protected virtual TerrainFace CreateTerrainFace(Mesh sharedMesh, Vector3 direction) =>
+        new TerrainFace(ShapeGenerator, sharedMesh, resolution, direction);
+
+
+    // ReSharper restore Unity.ExpensiveCode
+
     private void GenerateMesh()
     {
-        foreach (var face in _terrainFaces.Where((face, i) => meshFilters[i].gameObject.activeSelf))
+        foreach (var face in TerrainFaces.Where((face, i) => meshFilters[i].gameObject.activeSelf))
         {
             face.ConstructMesh();
         }
 
-        _colorGenerator.UpdateElevation(_shapeGenerator.ElevationMinMax);
-
-        var planetMaxRadius = shapeSettings.planetRadius * (1 + _shapeGenerator.ElevationMinMax.Max);
-        _sphereCollider.radius = planetMaxRadius;
+        _colorGenerator.UpdateElevation(ShapeGenerator.ElevationMinMax);
+        _sphereCollider.radius = CalculateRadius();
     }
+
+    // ReSharper restore Unity.ExpensiveCode
 
     private void GenerateColours()
     {
         _colorGenerator.UpdateColors();
-        foreach (var face in _terrainFaces.Where((face, i) => meshFilters[i].gameObject.activeSelf))
+        foreach (var face in TerrainFaces.Where((face, i) => meshFilters[i].gameObject.activeSelf))
         {
             face.UpdateUVs(_colorGenerator);
         }
     }
+
+
+    protected virtual float CalculateRadius() => shapeSettings.planetRadius * (1 + ShapeGenerator.ElevationMinMax.Max);
 }

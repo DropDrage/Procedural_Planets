@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace Editor
 {
-    [CustomEditor(typeof(Planet))]
+    [CustomEditor(typeof(Planet), true)]
     public class PlanetEditor : UnityEditor.Editor
     {
         private Planet _planet;

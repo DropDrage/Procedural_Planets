@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TerrainFace
 {
-    private readonly ShapeGenerator _shapeGenerator;
+    protected readonly ShapeGenerator ShapeGenerator;
 
     private readonly Mesh _mesh;
     private readonly int _resolution;
@@ -16,7 +16,7 @@ public class TerrainFace
 
     public TerrainFace(ShapeGenerator shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)
     {
-        _shapeGenerator = shapeGenerator;
+        ShapeGenerator = shapeGenerator;
         _mesh = mesh;
         _resolution = resolution;
         _localUp = localUp;
@@ -24,6 +24,8 @@ public class TerrainFace
         _axisA = new Vector3(_localUp.y, _localUp.z, _localUp.x);
         _axisB = Vector3.Cross(_localUp, _axisA);
     }
+
+    // ReSharper restore Unity.ExpensiveCode
 
     public void ConstructMesh()
     {
@@ -77,11 +79,16 @@ public class TerrainFace
     private void GenerateUvAndVertex(int i, int x, int y, IList<Vector3> vertices, Vector2[] uv)
     {
         var pointOnUnitSphere = GeneratePointOnUnitSphere(x, y);
-        var unscaledElevation = _shapeGenerator.CalculateUnscaledElevation(pointOnUnitSphere);
+        var unscaledElevation = ShapeGenerator.CalculateUnscaledElevation(pointOnUnitSphere);
 
-        vertices[i] = pointOnUnitSphere * _shapeGenerator.GetScaledElevation(unscaledElevation);
+        vertices[i] = CalculateVertex(pointOnUnitSphere, unscaledElevation);
         uv[i].y = unscaledElevation;
     }
+
+    protected virtual Vector3 CalculateVertex(Vector3 pointOnUnitSphere, float unscaledElevation) =>
+        pointOnUnitSphere * ShapeGenerator.GetScaledElevation(unscaledElevation);
+
+    // ReSharper restore Unity.ExpensiveCode
 
     public void UpdateUVs(ColorGenerator colorGenerator)
     {

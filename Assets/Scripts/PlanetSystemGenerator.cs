@@ -1,4 +1,5 @@
 using System.Linq;
+using PlanetSystemGenerators;
 using UnityEngine;
 
 public class PlanetSystemGenerator : MonoBehaviour
@@ -15,15 +16,20 @@ public class PlanetSystemGenerator : MonoBehaviour
 
     [SerializeField] private Vector3 center;
     [SerializeField] private PlanetGenerator planetGenerator;
+    [SerializeField] private SunGenerator sunGenerator;
+
+    [Space(20)]
+    [Range(0, int.MaxValue)]
+    [SerializeField] private int seed = 1;
 
 
     public void Generate()
     {
-        planetGenerator.SetupSeed();
+        Random.InitState(seed);
+
         var gravityBodies = new GravityBody[planetCountRange.Random()];
         var planetSystem = Utils.SpawnPrefab("Planet System").GetComponent<PlanetSystem>();
         planetSystem.transform.position = center;
-        planetSystem.bodies = gravityBodies;
         var systemName = GenerateSystemName(planetSystem.gameObject);
 
         for (var i = 0; i < gravityBodies.Length; i++)
@@ -31,17 +37,18 @@ public class PlanetSystemGenerator : MonoBehaviour
             gravityBodies[i] = planetGenerator.Generate();
         }
 
-        var orderedBodies = gravityBodies.OrderByDescending(body => body.radius * body.Mass).ToList();
-        var sun = orderedBodies[0];
+        var orderedBodies = gravityBodies.OrderBy(body => body.radius * body.Mass).ToList();
+
+        var sun = sunGenerator.Generate();
         var sunTransform = sun.transform;
-
         sun.bodyName = $"{systemName} Sun";
-        sun.GetComponent<Rigidbody>().mass *= 10;
         sunTransform.parent = planetSystem.transform;
+        planetSystem.bodies = gravityBodies.Append(sun).ToArray();
 
-        var nextOrbit = orbitDistanceRadius.Random() + planetGenerator.planetRadiusRange.to;
-        foreach (var gravityBody in orderedBodies.Skip(1).Reverse())
+        float nextOrbit;
+        foreach (var gravityBody in orderedBodies)
         {
+            nextOrbit = orbitDistanceRadius.Random() + sunGenerator.planetRadiusRange.to;
             //sqrt(G*(m1 + m2)/ r)
             var bodyTransform = gravityBody.transform;
             bodyTransform.parent = planetSystem.transform;

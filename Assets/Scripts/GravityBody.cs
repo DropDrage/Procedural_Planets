@@ -5,6 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class GravityBody : MonoBehaviour
 {
+    /**
+     * Only for convenient access to radius.
+     */
     public float radius;
 
     public float orbitRadius;
@@ -16,13 +19,11 @@ public class GravityBody : MonoBehaviour
     private Rigidbody _rb;
     private Planet _planet;
 
+    private Transform _transform;
 
-    public Vector3 Velocity { get; private set; }
+
     public float Mass => _rb.mass;
-    public Rigidbody Rigidbody => _rb;
-    public Vector3 Position => _rb.position;
-
-    [SerializeField] private Quaternion velocityRotation;
+    public Vector3 Position => _transform.position;
 
 
     // mass = surfaceGravity * radius * radius / 9.8f;
@@ -38,6 +39,7 @@ public class GravityBody : MonoBehaviour
         radius = _planet.shapeSettings.planetRadius;
         gameObject.name = bodyName;
         _rb.AddForce(initialVelocity, ForceMode.VelocityChange);
+        _transform = transform;
         // Velocity = initialVelocity;
     }
 
@@ -45,7 +47,7 @@ public class GravityBody : MonoBehaviour
     {
         foreach (var otherBody in allBodies.Where(body => body != this))
         {
-            var distance = otherBody.Position - _rb.position;
+            var distance = otherBody.Position - Position;
             var sqrDst = distance.sqrMagnitude;
             var forceDir = distance.normalized;
 
@@ -53,11 +55,6 @@ public class GravityBody : MonoBehaviour
             // Velocity += acceleration;
             _rb.AddForce(acceleration, ForceMode.Force);
         }
-    }
-
-    public void UpdatePosition()
-    {
-        _rb.AddForce(Velocity, ForceMode.Force);
     }
 
 
