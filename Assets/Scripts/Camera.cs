@@ -104,13 +104,17 @@ public class Camera : MonoBehaviour
         if (Physics.Raycast(ray, out var hit))
         {
             print($"target set {hit.collider.gameObject.name}");
+
             _target = hit.collider.gameObject;
-            if (_distanceToTarget == 0)
+            _minScrollDistance = _target.GetComponent<Planet>().shapeSettings.planetRadius * 2f;
+            if (_target.GetComponent<Sun>() != null)
             {
-                _distanceToTarget = (_target.transform.position - transform.position).magnitude;
+                _minScrollDistance *= 1.5f;
             }
 
-            _minScrollDistance = _target.GetComponent<Planet>().shapeSettings.planetRadius + 1.5f;
+            _distanceToTarget =
+                ValidateDistance((_target.transform.position - transform.position).magnitude + _minScrollDistance);
+
             _followTargetUpdate = _followTarget;
         }
     }
@@ -123,13 +127,8 @@ public class Camera : MonoBehaviour
     private void OnScrollMouse(InputAction.CallbackContext context)
     {
         var tempScroll = _distanceToTarget - context.action.ReadValue<Vector2>().y * Time.fixedDeltaTime;
-        if (tempScroll > _minScrollDistance)
-        {
-            _distanceToTarget = tempScroll;
-        }
-        else
-        {
-            _distanceToTarget = _minScrollDistance;
-        }
+        _distanceToTarget = ValidateDistance(tempScroll);
     }
+
+    private float ValidateDistance(float distance) => distance > _minScrollDistance ? distance : _minScrollDistance;
 }

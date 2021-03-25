@@ -112,7 +112,7 @@ namespace PlanetSystemGenerators
             return GenerateNoiseSettings(downModifier, limitModifier);
         }
 
-        protected NoiseSettings GenerateNoiseSettings(float downModifier = 1, float limitModifier = 1)
+        protected virtual NoiseSettings GenerateNoiseSettings(float downModifier = 1, float limitModifier = 1)
         {
             var filterType =
                 (NoiseSettings.FilterType) Mathf.FloorToInt(
@@ -125,7 +125,7 @@ namespace PlanetSystemGenerators
                 roughnessRange.Random() * limitModifier,
                 persistenceRange.Random() * limitModifier,
                 Random.onUnitSphere * centerMagnitudeRange.Random(),
-                strength * ZeroOneRange.Random() * downModifier / ZeroOneRange.Random()
+                strength * ZeroOneRange.Random() * downModifier
             );
 
             NoiseSettings.RigidNoiseSettings rigidNoiseSettings = null;

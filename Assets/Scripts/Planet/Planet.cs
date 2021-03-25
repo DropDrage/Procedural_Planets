@@ -119,7 +119,12 @@ public class Planet : MonoBehaviour
         }
 
         _colorGenerator.UpdateElevation(ShapeGenerator.ElevationMinMax);
-        _sphereCollider.radius = CalculateRadius();
+        OnRadiusCalculated(CalculateRadius());
+    }
+
+    protected virtual void OnRadiusCalculated(float radius)
+    {
+        _sphereCollider.radius = radius;
     }
 
     // ReSharper restore Unity.ExpensiveCode

@@ -1,3 +1,4 @@
+using Noise;
 using Settings;
 using UnityEngine;
 
@@ -63,8 +64,22 @@ namespace PlanetSystemGenerators
             sunLight.color = _sunColor;
 
             var gravityBody = planet.GetComponent<GravityBody>();
-            sunLight.intensity = gravityBody.Mass * 150;
+            sunLight.intensity = gravityBody.Mass * 80;
             sunLight.range = gravityBody.Mass * 5;
+        }
+
+        protected override NoiseSettings GenerateNoiseSettings(float downModifier = 1, float limitModifier = 1)
+        {
+            var noiseSettings = base.GenerateNoiseSettings(downModifier, limitModifier);
+            noiseSettings.simpleNoiseSettings.minValue =
+                noiseSettings.simpleNoiseSettings.strength + ZeroOneRange.Random();
+            if (noiseSettings.rigidNoiseSettings != null)
+            {
+                noiseSettings.rigidNoiseSettings.minValue =
+                    noiseSettings.rigidNoiseSettings.strength + ZeroOneRange.Random();
+            }
+
+            return noiseSettings;
         }
     }
 }
