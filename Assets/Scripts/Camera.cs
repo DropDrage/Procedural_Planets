@@ -17,7 +17,7 @@ public class Camera : MonoBehaviour
     private bool _rightClicked;
 
 
-    private Action emptyTarget = () => { };
+    private readonly Action _emptyTarget = () => { };
     private Action _followTarget;
 
     private Action _followTargetUpdate;
@@ -44,7 +44,7 @@ public class Camera : MonoBehaviour
 
             Move();
         };
-        _followTargetUpdate = emptyTarget;
+        _followTargetUpdate = _emptyTarget;
 
 
         _inputActions = new InputActions();
