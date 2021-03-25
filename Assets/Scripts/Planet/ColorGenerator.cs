@@ -6,8 +6,10 @@ using UnityEngine;
 public class ColorGenerator
 {
     private static readonly int ElevationMinMax = Shader.PropertyToID("_elevationMinMax");
+    private static readonly int Texture = Shader.PropertyToID("_texture");
 
     private const int TextureResolution = 50;
+    private const int DoubledTextureResolution = TextureResolution * 2;
 
     private ColorSettings _settings;
     private Texture2D _texture;
@@ -18,9 +20,9 @@ public class ColorGenerator
     {
         _settings = settings;
 
-        if (_texture == null || _texture.height != settings.biomeColorSettings.Biomes.Length)
+        if (_texture == null || _texture.height != settings.biomeColorSettings.biomes.Length)
         {
-            _texture = new Texture2D(TextureResolution * 2, settings.biomeColorSettings.Biomes.Length,
+            _texture = new Texture2D(TextureResolution * 2, settings.biomeColorSettings.biomes.Length,
                 TextureFormat.RGBA32, false);
         }
 
@@ -38,12 +40,12 @@ public class ColorGenerator
                             + (_biomeNoiseFilter.Evaluate(pointOnUnitSphere) - _settings.biomeColorSettings.noiseOffset)
                             * _settings.biomeColorSettings.noiseStrength;
         var biomeIndex = 0f;
-        var biomesCount = _settings.biomeColorSettings.Biomes.Length;
+        var biomesCount = _settings.biomeColorSettings.biomes.Length;
         var blendRange = _settings.biomeColorSettings.blendAmount / 2f + .001f;
 
         for (var i = 0; i < biomesCount; i++)
         {
-            var distance = heightPercent - _settings.biomeColorSettings.Biomes[i].startHeight;
+            var distance = heightPercent - _settings.biomeColorSettings.biomes[i].startHeight;
             var weight = Mathf.InverseLerp(-blendRange, blendRange, distance);
             biomeIndex = biomeIndex * (1 - weight) + i * weight;
         }
@@ -54,24 +56,29 @@ public class ColorGenerator
     public void UpdateColors()
     {
         var colors = new Color[_texture.width * _texture.height];
-        ParallelEnumerable.Range(0, _settings.biomeColorSettings.Biomes.Length)
+        ParallelEnumerable.Range(0, _settings.biomeColorSettings.biomes.Length)
             .ForAll(biomeIndex =>
             {
-                var biome = _settings.biomeColorSettings.Biomes[biomeIndex];
-                var colorIndex = biomeIndex * TextureResolution * 2;
-                for (var i = 0; i < TextureResolution * 2; i++)
+                var biome = _settings.biomeColorSettings.biomes[biomeIndex];
+                var colorIndex = biomeIndex * DoubledTextureResolution;
+                for (var i = 0; i < TextureResolution; i++)
                 {
-                    var gradientColor = i < TextureResolution
-                        ? _settings.oceanGradient.Evaluate(i / (TextureResolution - 1f))
-                        : biome.gradient.Evaluate((i - TextureResolution) / (TextureResolution - 1f));
-                    var tintColor = biome.tint;
-                    colors[colorIndex] = gradientColor * (1 - biome.tintPercent) + tintColor * biome.tintPercent;
-                    colorIndex++;
+                    var gradientColor = _settings.oceanGradient.Evaluate(i / (TextureResolution - 1f));
+                    colors[colorIndex++] = GenerateColorFromGradient(gradientColor, biome.tint, biome.tintPercent);
+                }
+
+                for (var i = TextureResolution; i < DoubledTextureResolution; i++)
+                {
+                    var gradientColor = biome.gradient.Evaluate((i - TextureResolution) / (TextureResolution - 1f));
+                    colors[colorIndex++] = GenerateColorFromGradient(gradientColor, biome.tint, biome.tintPercent);
                 }
             });
 
         _texture.SetPixels(colors);
         _texture.Apply();
-        _settings.planetMaterial.SetTexture("_texture", _texture);
+        _settings.planetMaterial.SetTexture(Texture, _texture);
     }
+
+    private static Color GenerateColorFromGradient(Color gradientColor, Color tintColor, float tintPercent) =>
+        gradientColor * (1 - tintPercent) + tintColor * tintPercent;
 }

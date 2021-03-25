@@ -61,7 +61,7 @@ public class PlanetSystemGenerator : MonoBehaviour
             var centralBodyDirection = (sunTransform.position - bodyTransform.position).normalized;
             var left = Vector3.Cross(centralBodyDirection, sunTransform.up);
             gravityBody.initialVelocity = left.normalized
-                                          * (1.15f
+                                          * (1.05f
                                              * Mathf.Sqrt(
                                                  Universe.GravitationConstant
                                                  * (gravityBody.Mass + sun.Mass)

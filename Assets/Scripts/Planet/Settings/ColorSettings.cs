@@ -24,7 +24,7 @@ namespace Settings
         [Serializable]
         public class BiomeColorSettings
         {
-            public Biome[] Biomes;
+            public Biome[] biomes;
             public NoiseSettings noise;
             public float noiseOffset;
             public float noiseStrength;
@@ -36,7 +36,7 @@ namespace Settings
             public BiomeColorSettings(Biome[] biomes, NoiseSettings noise, float noiseOffset, float noiseStrength,
                                       float blendAmount)
             {
-                Biomes = biomes;
+                this.biomes = biomes;
                 this.noise = noise;
                 this.noiseOffset = noiseOffset;
                 this.noiseStrength = noiseStrength;

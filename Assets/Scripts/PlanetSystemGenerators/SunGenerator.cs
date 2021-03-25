@@ -8,11 +8,11 @@ namespace PlanetSystemGenerators
     {
         private const float ForwardColorLimit = 55 / 360f;
         private const float BackwardColorLimit = 170 / 360f;
-
         private const float RotatedColorLimit = ForwardColorLimit + BackwardColorLimit;
 
 
         [SerializeField] private IntRange biomeOceanColorCountRange;
+        [SerializeField] private FloatRange lightIntensityRange;
 
         private Color _sunColor;
 
@@ -20,7 +20,7 @@ namespace PlanetSystemGenerators
         protected override ColorSettings.BiomeColorSettings GenerateBiomeSettings()
         {
             {
-                var tempSunColor = Random.ColorHSV(0f, RotatedColorLimit, 0.05f, 0.85f, 0.75f, 1f);
+                var tempSunColor = Random.ColorHSV(0f, RotatedColorLimit, 0.05f, 0.85f, 0.8f, 1f);
                 Color.RGBToHSV(tempSunColor, out var h, out var s, out var v);
                 h = (1 + ForwardColorLimit - h) % 1;
                 _sunColor = Color.HSVToRGB(h, s, v);
@@ -41,14 +41,16 @@ namespace PlanetSystemGenerators
         {
             var oceanColorKeys = new GradientColorKey[biomeOceanColorCountRange.Random()];
             {
+                var time = Random.value;
                 Color.RGBToHSV(_sunColor, out var h, out var s, out var v);
                 for (var k = oceanColorKeys.Length - 1; k >= 0; k--) //from black to saturated
                 {
                     oceanColorKeys[k].color = Color.HSVToRGB(h, s, v);
-                    oceanColorKeys[k].time = Random.value;
+                    oceanColorKeys[k].time = time;
 
                     s += Random.value;
-                    v -= Random.value;
+                    v = Mathf.Lerp(0, v, Random.value);
+                    time = Mathf.Lerp(0, time, Random.value);
                 }
             }
 
@@ -61,10 +63,13 @@ namespace PlanetSystemGenerators
         protected override void CustomGeneration(GameObject planet)
         {
             var sunLight = planet.GetComponent<Light>();
-            sunLight.color = _sunColor;
+            Color.RGBToHSV(_sunColor, out var h, out var s, out var v);
+            s = Mathf.Lerp(0, s, Random.value);
+            v = Mathf.Lerp(v, 1f, Random.value);
+            sunLight.color = Color.HSVToRGB(h, s, v);
 
             var gravityBody = planet.GetComponent<GravityBody>();
-            sunLight.intensity = gravityBody.Mass * 80;
+            sunLight.intensity = lightIntensityRange.Random();
             sunLight.range = gravityBody.Mass * 5;
         }
 

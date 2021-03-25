@@ -7,13 +7,13 @@ public class Planet : MonoBehaviour
     protected readonly ShapeGenerator ShapeGenerator = new ShapeGenerator();
     private readonly ColorGenerator _colorGenerator = new ColorGenerator();
 
-    [Range(2, 256)]
-    public int resolution = 10;
-
     public enum FaceRenderMask
     {
         All, Top, Bottom, Left, Right, Front, Back,
     }
+
+    [Range(2, 256)]
+    public int resolution = 10;
 
     public FaceRenderMask faceRenderMask;
 
@@ -23,14 +23,16 @@ public class Planet : MonoBehaviour
     [SerializeField, HideInInspector]
     private MeshFilter[] meshFilters;
 
-    protected TerrainFace[] TerrainFaces;
+    private TerrainFace[] _terrainFaces;
 
     private SphereCollider _sphereCollider;
+    private TrailRenderer _trailRenderer;
 
 
     private void Start()
     {
         _sphereCollider = GetComponent<SphereCollider>();
+        _trailRenderer = GetComponent<TrailRenderer>();
         GeneratePlanet();
     }
 
@@ -65,15 +67,13 @@ public class Planet : MonoBehaviour
             _sphereCollider = gameObject.AddComponent<SphereCollider>();
         }
 
-        // gameObject.AddComponent<SphereCollider>().radius = shapeSettings.planetRadius;
-
         if (meshFilters == null || meshFilters.Length == 0)
         {
             print($"Recreate {meshFilters}");
             meshFilters = new MeshFilter[6];
         }
 
-        TerrainFaces = new TerrainFace[6];
+        _terrainFaces = new TerrainFace[6];
 
         var directions = new[]
         {
@@ -99,7 +99,7 @@ public class Planet : MonoBehaviour
 
             meshFilters[i].GetComponent<MeshRenderer>().sharedMaterial = colorSettings.planetMaterial;
 
-            TerrainFaces[i] = CreateTerrainFace(meshFilters[i].sharedMesh, directions[i]);
+            _terrainFaces[i] = CreateTerrainFace(meshFilters[i].sharedMesh, directions[i]);
             var renderFace = faceRenderMask == FaceRenderMask.All || (int) faceRenderMask - 1 == i;
             meshFilters[i].gameObject.SetActive(renderFace);
         }
@@ -113,7 +113,7 @@ public class Planet : MonoBehaviour
 
     private void GenerateMesh()
     {
-        foreach (var face in TerrainFaces.Where((face, i) => meshFilters[i].gameObject.activeSelf))
+        foreach (var face in _terrainFaces.Where((face, i) => meshFilters[i].gameObject.activeSelf))
         {
             face.ConstructMesh();
         }
@@ -132,10 +132,12 @@ public class Planet : MonoBehaviour
     private void GenerateColours()
     {
         _colorGenerator.UpdateColors();
-        foreach (var face in TerrainFaces.Where((face, i) => meshFilters[i].gameObject.activeSelf))
+        foreach (var face in _terrainFaces.Where((face, i) => meshFilters[i].gameObject.activeSelf))
         {
             face.UpdateUVs(_colorGenerator);
         }
+
+        _trailRenderer.colorGradient = colorSettings.oceanGradient;
     }
 
 
