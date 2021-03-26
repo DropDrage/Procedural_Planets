@@ -5,9 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class GravityBody : MonoBehaviour
 {
-    /**
-     * Only for convenient access to radius.
-     */
+    /// <summary>
+    /// Only for convenient access to radius.
+    /// </summary>
     public float radius;
 
     public float orbitRadius;
@@ -40,7 +40,6 @@ public class GravityBody : MonoBehaviour
         gameObject.name = bodyName;
         _rb.AddForce(initialVelocity, ForceMode.VelocityChange);
         _transform = transform;
-        // Velocity = initialVelocity;
     }
 
     public void AddAttraction(IEnumerable<GravityBody> allBodies)
@@ -52,8 +51,7 @@ public class GravityBody : MonoBehaviour
             var forceDir = distance.normalized;
 
             var acceleration = forceDir * Universe.GravitationConstant * (Mass * otherBody.Mass) / sqrDst;
-            // Velocity += acceleration;
-            _rb.AddForce(acceleration, ForceMode.Force);
+            _rb.AddForce(acceleration);
         }
     }
 

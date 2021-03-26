@@ -13,5 +13,5 @@ public class Sun : Planet
         audioSource.maxDistance = radius * 15f;
     }
 
-    protected override float CalculateRadius() => shapeSettings.planetRadius;
+    protected override float CalculateRadius() => shapeSettings.planetRadius * 2;
 }

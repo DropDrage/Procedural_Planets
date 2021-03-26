@@ -10,7 +10,6 @@ public class PlanetSystem : MonoBehaviour
         foreach (var body in bodies)
         {
             body.AddAttraction(bodies);
-            // body.UpdatePosition();
         }
     }
 }

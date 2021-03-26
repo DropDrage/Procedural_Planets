@@ -117,10 +117,11 @@ namespace PlanetSystemGenerators
             var filterType =
                 (NoiseSettings.FilterType) Mathf.FloorToInt(
                     Random.Range(0f, Enum.GetValues(typeof(NoiseSettings.FilterType)).Length - 0.75f));
-            var strength = strengthRange.Random() * limitModifier;
+            var layersCount = Mathf.CeilToInt(layersInNoiseCountRange.Random() * limitModifier);
+            var strength = strengthRange.Random() * limitModifier / layersCount;
             var simpleNoiseSettings = new NoiseSettings.SimpleNoiseSettings(
                 strength,
-                Mathf.CeilToInt(layersInNoiseCountRange.Random() * limitModifier),
+                layersCount,
                 baseRoughnessRange.Random() * limitModifier,
                 roughnessRange.Random() * limitModifier,
                 persistenceRange.Random() * limitModifier,
