@@ -47,7 +47,9 @@ namespace Settings
             [Serializable]
             public class Biome
             {
-                [FormerlySerializedAs("Gradient")] public Gradient gradient;
+                [FormerlySerializedAs("Gradient")]
+                public Gradient gradient;
+
                 public Color tint;
 
                 [Range(0, 1)]

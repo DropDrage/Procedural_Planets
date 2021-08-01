@@ -18,10 +18,10 @@ namespace PlanetSystemGenerators
 
         protected override ColorSettings.BiomeColorSettings GenerateBiomeSettings()
         {
-            var biomes = new ColorSettings.BiomeColorSettings.Biome[biomesRange.Random()];
+            var biomes = new ColorSettings.BiomeColorSettings.Biome[biomesRange.RandomValue];
             for (var i = 0; i < biomes.Length; i++)
             {
-                var colorKeys = new GradientColorKey[biomeColorCountRange.Random()];
+                var colorKeys = new GradientColorKey[biomeColorCountRange.RandomValue];
                 for (var k = 0; k < colorKeys.Length; k++)
                 {
                     colorKeys[k].color = Random.ColorHSV(0, 1f, 0.1f, 0.825f);
@@ -37,12 +37,12 @@ namespace PlanetSystemGenerators
             }
 
             return new ColorSettings.BiomeColorSettings(biomes, GenerateNoiseSettings(),
-                biomeNoiseOffsetRange.Random(), biomeStrengthRange.Random(), biomeBlendRange.Random());
+                biomeNoiseOffsetRange.RandomValue, biomeStrengthRange.RandomValue, biomeBlendRange.RandomValue);
         }
 
         protected override Gradient GenerateOceanGraident()
         {
-            var oceanColorKeys = new GradientColorKey[biomeOceanColorCountRange.Random()];
+            var oceanColorKeys = new GradientColorKey[biomeOceanColorCountRange.RandomValue];
             for (var k = 0; k < oceanColorKeys.Length; k++) //ToDo triad or other color generator
             {
                 oceanColorKeys[k].color = Random.ColorHSV(0.37f, 0.9f, 0.1f, 0.75f);

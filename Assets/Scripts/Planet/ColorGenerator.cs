@@ -10,6 +10,7 @@ public class ColorGenerator
 
     private const int TextureResolution = 50;
     private const int DoubledTextureResolution = TextureResolution * 2;
+    private const float TextureResolutionMinusOne = TextureResolution - 1f;
 
     private ColorSettings _settings;
     private Texture2D _texture;
@@ -22,7 +23,7 @@ public class ColorGenerator
 
         if (_texture == null || _texture.height != settings.biomeColorSettings.biomes.Length)
         {
-            _texture = new Texture2D(TextureResolution * 2, settings.biomeColorSettings.biomes.Length,
+            _texture = new Texture2D(DoubledTextureResolution, settings.biomeColorSettings.biomes.Length,
                 TextureFormat.RGBA32, false);
         }
 
@@ -63,13 +64,13 @@ public class ColorGenerator
                 var colorIndex = biomeIndex * DoubledTextureResolution;
                 for (var i = 0; i < TextureResolution; i++)
                 {
-                    var gradientColor = _settings.oceanGradient.Evaluate(i / (TextureResolution - 1f));
+                    var gradientColor = _settings.oceanGradient.Evaluate(i / TextureResolutionMinusOne);
                     colors[colorIndex++] = GenerateColorFromGradient(gradientColor, biome.tint, biome.tintPercent);
                 }
 
-                for (var i = TextureResolution; i < DoubledTextureResolution; i++)
+                for (int i = TextureResolution; i < DoubledTextureResolution; i++)
                 {
-                    var gradientColor = biome.gradient.Evaluate((i - TextureResolution) / (TextureResolution - 1f));
+                    var gradientColor = biome.gradient.Evaluate((i - TextureResolution) / TextureResolutionMinusOne);
                     colors[colorIndex++] = GenerateColorFromGradient(gradientColor, biome.tint, biome.tintPercent);
                 }
             });

@@ -56,7 +56,7 @@ namespace PlanetSystemGenerators
 
             #region Shape
 
-            var noiseLayers = new ShapeSettings.NoiseLayer[noiseLayersRange.Random()];
+            var noiseLayers = new ShapeSettings.NoiseLayer[noiseLayersRange.RandomValue];
             for (var i = 0; i < noiseLayers.Length; i++)
             {
                 noiseLayers[i] =
@@ -85,8 +85,8 @@ namespace PlanetSystemGenerators
             var planetRigidbody = planet.GetComponent<Rigidbody>();
             planetRigidbody.mass = planet.shapeSettings.planetRadius
                                    * planet.shapeSettings.planetRadius
-                                   * massMultiplierRange.Random();
-            planetRigidbody.AddTorque(Random.onUnitSphere * angularVelocityRange.Random(), ForceMode.VelocityChange);
+                                   * massMultiplierRange.RandomValue;
+            planetRigidbody.AddTorque(Random.onUnitSphere * angularVelocityRange.RandomValue, ForceMode.VelocityChange);
 
             #endregion
 
@@ -117,22 +117,22 @@ namespace PlanetSystemGenerators
             var filterType =
                 (NoiseSettings.FilterType) Mathf.FloorToInt(
                     Random.Range(0f, Enum.GetValues(typeof(NoiseSettings.FilterType)).Length - 0.75f));
-            var layersCount = Mathf.CeilToInt(layersInNoiseCountRange.Random() * limitModifier);
-            var strength = strengthRange.Random() * limitModifier / layersCount;
+            var layersCount = Mathf.CeilToInt(layersInNoiseCountRange.RandomValue * limitModifier);
+            var strength = strengthRange.RandomValue * limitModifier / layersCount;
             var simpleNoiseSettings = new NoiseSettings.SimpleNoiseSettings(
                 strength,
                 layersCount,
-                baseRoughnessRange.Random() * limitModifier,
-                roughnessRange.Random() * limitModifier,
-                persistenceRange.Random() * limitModifier,
-                Random.onUnitSphere * centerMagnitudeRange.Random(),
-                strength * ZeroOneRange.Random() * downModifier
+                baseRoughnessRange.RandomValue * limitModifier,
+                roughnessRange.RandomValue * limitModifier,
+                persistenceRange.RandomValue * limitModifier,
+                Random.onUnitSphere * centerMagnitudeRange.RandomValue,
+                strength * ZeroOneRange.RandomValue * downModifier
             );
 
             NoiseSettings.RigidNoiseSettings rigidNoiseSettings = null;
             if (filterType == NoiseSettings.FilterType.Rigid)
             {
-                rigidNoiseSettings = simpleNoiseSettings.ToRigid(weightRange.Random());
+                rigidNoiseSettings = simpleNoiseSettings.ToRigid(weightRange.RandomValue);
             }
 
             return new NoiseSettings(filterType, simpleNoiseSettings, rigidNoiseSettings);

@@ -50,7 +50,7 @@ public class GravityBody : MonoBehaviour
             var sqrDst = distance.sqrMagnitude;
             var forceDir = distance.normalized;
 
-            var acceleration = forceDir * Universe.GravitationConstant * (Mass * otherBody.Mass) / sqrDst;
+            var acceleration = forceDir * (Universe.GravitationConstant * (Mass * otherBody.Mass)) / sqrDst;
             _rb.AddForce(acceleration);
         }
     }

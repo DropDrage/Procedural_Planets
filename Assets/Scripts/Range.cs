@@ -1,10 +1,13 @@
 using System;
 
 [Serializable]
-public class Range<T>
+public abstract class Range<T>
 {
     public T from;
     public T to;
+
+    public abstract T RandomValue { get; }
+
 
     public Range(T from, T to)
     {
@@ -17,7 +20,8 @@ public class Range<T>
 [Serializable]
 public class IntRange : Range<int>
 {
-    public int Random() => UnityEngine.Random.Range(from, to);
+    public override int RandomValue => UnityEngine.Random.Range(from, to);
+
 
     public IntRange(int from, int to) : base(from, to)
     {
@@ -27,7 +31,8 @@ public class IntRange : Range<int>
 [Serializable]
 public class FloatRange : Range<float>
 {
-    public float Random() => UnityEngine.Random.Range(from, to);
+    public override float RandomValue => UnityEngine.Random.Range(from, to);
+
 
     public FloatRange(float from, float to) : base(@from, to)
     {

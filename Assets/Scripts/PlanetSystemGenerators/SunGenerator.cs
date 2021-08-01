@@ -39,7 +39,7 @@ namespace PlanetSystemGenerators
 
         protected override Gradient GenerateOceanGraident()
         {
-            var oceanColorKeys = new GradientColorKey[biomeOceanColorCountRange.Random()];
+            var oceanColorKeys = new GradientColorKey[biomeOceanColorCountRange.RandomValue];
             {
                 var time = Random.value;
                 Color.RGBToHSV(_sunColor, out var h, out var s, out var v);
@@ -69,7 +69,7 @@ namespace PlanetSystemGenerators
             sunLight.color = Color.HSVToRGB(h, s, v);
 
             var gravityBody = planet.GetComponent<GravityBody>();
-            sunLight.intensity = lightIntensityRange.Random();
+            sunLight.intensity = lightIntensityRange.RandomValue;
             sunLight.range = gravityBody.Mass * 5;
         }
 
@@ -77,11 +77,11 @@ namespace PlanetSystemGenerators
         {
             var noiseSettings = base.GenerateNoiseSettings(downModifier, limitModifier);
             noiseSettings.simpleNoiseSettings.minValue =
-                noiseSettings.simpleNoiseSettings.strength + ZeroOneRange.Random();
+                noiseSettings.simpleNoiseSettings.strength + ZeroOneRange.RandomValue;
             if (noiseSettings.rigidNoiseSettings != null)
             {
                 noiseSettings.rigidNoiseSettings.minValue =
-                    noiseSettings.rigidNoiseSettings.strength + ZeroOneRange.Random();
+                    noiseSettings.rigidNoiseSettings.strength + ZeroOneRange.RandomValue;
             }
 
             return noiseSettings;

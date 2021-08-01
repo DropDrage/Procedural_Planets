@@ -14,7 +14,7 @@ namespace Editor
         private UnityEditor.Editor _colourEditor;
 
         [SerializeField]
-        private bool _autoUpdate;
+        private bool autoUpdate;
 
         private static bool _shapeFoldout;
         private static bool _colorFoldout;
@@ -22,7 +22,7 @@ namespace Editor
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            _autoUpdate = false;
+            autoUpdate = false;
 
             GUILayout.Space(20);
 
@@ -61,7 +61,7 @@ namespace Editor
                 editor.OnInspectorGUI();
             }
 
-            if (check.changed && _autoUpdate)
+            if (check.changed && autoUpdate)
             {
                 onSettingUpdated?.Invoke();
             }

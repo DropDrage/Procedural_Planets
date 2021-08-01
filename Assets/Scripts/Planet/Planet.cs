@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Planet : MonoBehaviour
 {
-    protected readonly ShapeGenerator ShapeGenerator = new ShapeGenerator();
+    protected readonly ShapeGenerator shapeGenerator = new ShapeGenerator();
     private readonly ColorGenerator _colorGenerator = new ColorGenerator();
 
     public enum FaceRenderMask
@@ -33,6 +33,7 @@ public class Planet : MonoBehaviour
     {
         _sphereCollider = GetComponent<SphereCollider>();
         _trailRenderer = GetComponent<TrailRenderer>();
+
         GeneratePlanet();
     }
 
@@ -42,6 +43,8 @@ public class Planet : MonoBehaviour
         Initialize();
         GenerateMesh();
         GenerateColours();
+
+        System.GC.Collect();
     }
 
     public void OnShapeSettingsUpdated()
@@ -59,7 +62,7 @@ public class Planet : MonoBehaviour
 
     private void Initialize()
     {
-        ShapeGenerator.UpdateSettings(shapeSettings);
+        shapeGenerator.UpdateSettings(shapeSettings);
         _colorGenerator.UpdateSettings(colorSettings);
 
         if (_sphereCollider == null)
@@ -106,10 +109,7 @@ public class Planet : MonoBehaviour
     }
 
     protected virtual TerrainFace CreateTerrainFace(Mesh sharedMesh, Vector3 direction) =>
-        new TerrainFace(ShapeGenerator, sharedMesh, resolution, direction);
-
-
-    // ReSharper restore Unity.ExpensiveCode
+        new TerrainFace(shapeGenerator, sharedMesh, resolution, direction);
 
     private void GenerateMesh()
     {
@@ -118,7 +118,7 @@ public class Planet : MonoBehaviour
             face.ConstructMesh();
         }
 
-        _colorGenerator.UpdateElevation(ShapeGenerator.ElevationMinMax);
+        _colorGenerator.UpdateElevation(shapeGenerator.ElevationMinMax);
         OnRadiusCalculated(CalculateRadius());
     }
 
@@ -126,8 +126,6 @@ public class Planet : MonoBehaviour
     {
         _sphereCollider.radius = radius;
     }
-
-    // ReSharper restore Unity.ExpensiveCode
 
     private void GenerateColours()
     {
@@ -141,5 +139,5 @@ public class Planet : MonoBehaviour
     }
 
 
-    protected virtual float CalculateRadius() => shapeSettings.planetRadius * (1 + ShapeGenerator.ElevationMinMax.Max);
+    protected virtual float CalculateRadius() => shapeSettings.planetRadius * (1 + shapeGenerator.ElevationMinMax.Max);
 }

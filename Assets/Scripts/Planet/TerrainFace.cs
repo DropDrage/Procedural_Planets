@@ -25,8 +25,6 @@ public class TerrainFace
         _axisB = Vector3.Cross(_localUp, _axisA);
     }
 
-    // ReSharper restore Unity.ExpensiveCode
-
     public void ConstructMesh()
     {
         var decreasedResolution = _resolution - 1;
@@ -34,33 +32,32 @@ public class TerrainFace
         var triangles = new int[decreasedResolution * decreasedResolution * 6];
         var uv = _mesh.uv.Length == vertices.Length ? _mesh.uv : new Vector2[vertices.Length];
 
-        ParallelEnumerable.Range(0, _resolution)
-            .ForAll(y =>
+        for (var y = 0; y < _resolution; y++)
+        {
+            var triIndex = y * decreasedResolution * 6;
+            var yResolution = y * _resolution;
+            for (var x = 0; x < decreasedResolution; x++)
             {
-                var triIndex = y * decreasedResolution * 6;
-                var yResolution = y * _resolution;
-                for (var x = 0; x < decreasedResolution; x++)
+                var i = x + yResolution;
+                GenerateUvAndVertex(i, x, y, vertices, uv);
+
+                if (y == decreasedResolution)
                 {
-                    var i = x + yResolution;
-                    GenerateUvAndVertex(i, x, y, vertices, uv);
-
-                    if (y == decreasedResolution)
-                    {
-                        continue;
-                    }
-
-                    triangles[triIndex] = i;
-                    triangles[++triIndex] = i + _resolution + 1;
-                    triangles[++triIndex] = i + _resolution;
-                    triangles[++triIndex] = i;
-                    triangles[++triIndex] = i + 1;
-                    triangles[++triIndex] = i + _resolution + 1;
-
-                    ++triIndex;
+                    continue;
                 }
 
-                GenerateUvAndVertex(decreasedResolution + y * _resolution, decreasedResolution, y, vertices, uv);
-            });
+                triangles[triIndex] = i;
+                triangles[++triIndex] = i + _resolution + 1;
+                triangles[++triIndex] = i + _resolution;
+                triangles[++triIndex] = i;
+                triangles[++triIndex] = i + 1;
+                triangles[++triIndex] = i + _resolution + 1;
+
+                ++triIndex;
+            }
+
+            GenerateUvAndVertex(decreasedResolution + y * _resolution, decreasedResolution, y, vertices, uv);
+        }
 
         _mesh.Clear();
         _mesh.vertices = vertices;
@@ -87,8 +84,6 @@ public class TerrainFace
 
     protected virtual Vector3 CalculateVertex(Vector3 pointOnUnitSphere, float unscaledElevation) =>
         pointOnUnitSphere * ShapeGenerator.GetScaledElevation(unscaledElevation);
-
-    // ReSharper restore Unity.ExpensiveCode
 
     public void UpdateUVs(ColorGenerator colorGenerator)
     {

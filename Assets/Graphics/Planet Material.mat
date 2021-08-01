@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Planet Material
-  m_Shader: {fileID: -6465566751694194690, guid: 0ae4712ad8e14d24091c7d04e91550aa, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 07f5df0edf30da04d9f5deb3473f4c24, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
@@ -115,7 +115,7 @@ Material:
     - _Color: {r: 1, g: 0, b: 0.36519527, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
-    - _elevationMinMax: {r: 0.090355694, g: 0.37576115, b: 0, a: 0}
+    - _elevationMinMax: {r: -0.24606359, g: 0.25284183, b: 0, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &8828230413386495996
 MonoBehaviour:

@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Sun Material
-  m_Shader: {fileID: -6465566751694194690, guid: 07f5df0edf30da04d9f5deb3473f4c24, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 0ae4712ad8e14d24091c7d04e91550aa, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
