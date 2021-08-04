@@ -9,7 +9,7 @@ public abstract class Range<T>
     public abstract T RandomValue { get; }
 
 
-    public Range(T from, T to)
+    protected Range(T from, T to)
     {
         this.from = from;
         this.to = to;
@@ -34,7 +34,7 @@ public class FloatRange : Range<float>
     public override float RandomValue => UnityEngine.Random.Range(from, to);
 
 
-    public FloatRange(float from, float to) : base(@from, to)
+    public FloatRange(float from, float to) : base(from, to)
     {
     }
 }
