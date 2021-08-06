@@ -5,16 +5,15 @@ using Object = UnityEngine.Object;
 
 namespace Editor
 {
-    [CustomEditor(typeof(Planet), true)]
+    [CustomEditor(typeof(PlanetGenerator), true)]
     public class PlanetEditor : UnityEditor.Editor
     {
-        private Planet _planet;
+        private PlanetGenerator _planetGenerator;
 
         private UnityEditor.Editor _shapeEditor;
         private UnityEditor.Editor _colourEditor;
 
-        [SerializeField]
-        private bool autoUpdate;
+        [SerializeField] private bool autoUpdate;
 
         private static bool _shapeFoldout;
         private static bool _colorFoldout;
@@ -26,16 +25,18 @@ namespace Editor
 
             GUILayout.Space(20);
 
-            DrawSettingsEditor(_planet.shapeSettings, _planet.OnShapeSettingsUpdated, ref _shapeFoldout,
+            DrawSettingsEditor(_planetGenerator.shapeSettings, _planetGenerator.OnShapeSettingsUpdated,
+                ref _shapeFoldout,
                 ref _shapeEditor);
-            DrawSettingsEditor(_planet.colorSettings, _planet.OnColorSettingsUpdated, ref _colorFoldout,
+            DrawSettingsEditor(_planetGenerator.colorSettings, _planetGenerator.OnColorSettingsUpdated,
+                ref _colorFoldout,
                 ref _colourEditor);
 
             GUILayout.Space(20);
 
             if (GUILayout.Button("Generate Planet"))
             {
-                _planet.GeneratePlanet();
+                _planetGenerator.GeneratePlanet();
             }
 
             /*if (_autoUpdate = GUILayout.Toggle(_autoUpdate, "Auto Update"))
@@ -45,7 +46,7 @@ namespace Editor
         }
 
         private void DrawSettingsEditor(Object settings, Action onSettingUpdated, ref bool foldout,
-                                        ref UnityEditor.Editor editor)
+            ref UnityEditor.Editor editor)
         {
             if (settings is null)
             {
@@ -69,7 +70,7 @@ namespace Editor
 
         private void OnEnable()
         {
-            _planet = target as Planet;
+            _planetGenerator = target as PlanetGenerator;
         }
     }
 }

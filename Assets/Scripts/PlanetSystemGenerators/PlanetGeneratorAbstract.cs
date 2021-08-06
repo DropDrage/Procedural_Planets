@@ -17,9 +17,8 @@ namespace PlanetSystemGenerators
         [SerializeField] public FloatRange planetRadiusRange;
         [SerializeField] private IntRange noiseLayersRange;
 
-        [Space(20)]
-        [Header("Noise")]
-        [SerializeField] private FloatRange strengthRange;
+        [Space(20)] [Header("Noise")] [SerializeField]
+        private FloatRange strengthRange;
 
         [SerializeField] private IntRange layersInNoiseCountRange;
         [SerializeField] private FloatRange baseRoughnessRange;
@@ -29,9 +28,8 @@ namespace PlanetSystemGenerators
         [SerializeField] private FloatRange weightRange;
 
 
-        [Space(20)]
-        [Header("Gravity")]
-        [SerializeField] private FloatRange massMultiplierRange;
+        [Space(20)] [Header("Gravity")] [SerializeField]
+        private FloatRange massMultiplierRange;
 
         [SerializeField] private FloatRange angularVelocityRange;
 
@@ -52,7 +50,7 @@ namespace PlanetSystemGenerators
         public GravityBody Generate()
         {
             var planetObject = Utils.SpawnPrefab(prefab);
-            var planet = planetObject.GetComponent<Planet>();
+            var planet = planetObject.GetComponent<PlanetGenerator>();
 
             #region Shape
 

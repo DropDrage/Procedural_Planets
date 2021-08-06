@@ -17,7 +17,7 @@ public class GravityBody : MonoBehaviour
     public string bodyName = "Unnamed";
 
     private Rigidbody _rb;
-    private Planet _planet;
+    private PlanetGenerator _planetGenerator;
 
     private Transform _transform;
 
@@ -30,13 +30,13 @@ public class GravityBody : MonoBehaviour
 
     private void Awake()
     {
-        _planet = GetComponent<Planet>();
+        _planetGenerator = GetComponent<PlanetGenerator>();
         _rb = GetComponent<Rigidbody>();
     }
 
     private void Start()
     {
-        radius = _planet.shapeSettings.planetRadius;
+        radius = _planetGenerator.shapeSettings.planetRadius;
         gameObject.name = bodyName;
         _rb.AddForce(initialVelocity, ForceMode.VelocityChange);
         _transform = transform;

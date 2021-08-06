@@ -1,88 +1,60 @@
 using System;
 using JetBrains.Annotations;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Camera), typeof(InputHandler))]
 public class OrbitCamera : MonoBehaviour
 {
     private const float NewTargetDistanceModifier = 3f;
 
-
-    private InputActions _inputActions;
-
-    private Vector2 _mousePosition;
-    private Vector2 _mouseDelta;
-
-    private float _distanceToTarget;
-    private float _minScrollDistance;
-
-    // private Ve
     public GameObject Target
     {
         get => _target;
         set
         {
             _target = value;
-            _minScrollDistance = Target.GetComponent<Planet>().shapeSettings.planetRadius * 2f;
-            if (Target.GetComponent<Sun>() != null)
+            _minScrollDistance = Target.GetComponent<PlanetGenerator>().shapeSettings.planetRadius * 2f;
+            if (Target.GetComponent<SunGenerator>() != null)
             {
                 _minScrollDistance *= 1.5f;
             }
 
             _distanceToTarget = _minScrollDistance * NewTargetDistanceModifier;
-            _followTargetUpdate = _followTarget;
+            _followTargetUpdate = FollowTarget;
         }
     }
 
     public bool HasTarget => _target != null;
-    [CanBeNull] private GameObject _target;
 
-    private bool _rightClicked;
+    [SerializeField] private float editAngle;
+
+    private float _distanceToTarget;
+    private float _minScrollDistance;
+
+    private InputHandler _inputHandler;
+
+    [CanBeNull] private GameObject _target;
 
 
     private readonly Action _emptyTarget = () => { };
-    private Action _followTarget;
-
     private Action _followTargetUpdate;
 
+    private Camera _camera;
 
-    private Vector3 leftClickPosition;
-    private Vector3 leftClickDirection;
+    private Ray _leftClickRay, _editedClickRay;
+    private Vector3 _leftClickWorldPosition;
 
-
-    private void OnEnable()
-    {
-        _inputActions.Enable();
-    }
-
-    private void OnDisable()
-    {
-        _inputActions.Disable();
-    }
 
     private void Awake()
     {
-        _followTarget = () =>
-        {
-            if (_rightClicked)
-            {
-                Rotate();
-            }
-
-            Move();
-        };
         _followTargetUpdate = _emptyTarget;
 
+        _camera = GetComponent<Camera>();
 
-        _inputActions = new InputActions();
-
-        _inputActions.UI.Point.started += OnMouseMove;
-        _inputActions.UI.Click.performed += OnLeftClick;
-        _inputActions.UI.RightClick.started += OnRightClick;
-        _inputActions.UI.RightClick.performed += OnRightClick;
-        _inputActions.UI.RightClick.canceled += OnRightClick;
-        _inputActions.UI.MouseMove.performed += OnRightMouseMove;
-        _inputActions.UI.ScrollWheel.performed += OnScrollMouse;
+        _inputHandler = GetComponent<InputHandler>();
+        _inputHandler.OnLeftClick += OnLeftClick;
+        _inputHandler.OnVerticalScroll += OnVerticalScroll;
+        _inputHandler.OnMouseMove += OnMouseMove;
     }
 
     private void LateUpdate()
@@ -90,19 +62,19 @@ public class OrbitCamera : MonoBehaviour
         _followTargetUpdate();
     }
 
-    private void Move()
+    private void FollowTarget()
     {
         var myTransform = transform;
-        var endPosition = Target.transform.position - myTransform.forward * _distanceToTarget;
         var startPosition = myTransform.position;
+        var endPosition = Target.transform.position - myTransform.forward * _distanceToTarget;
 
         myTransform.position = Vector3.Lerp(startPosition, endPosition, 0.15f);
     }
 
-    private void Rotate()
+    private void Rotate(Vector2 delta)
     {
         var myTransform = transform;
-        var tempMouseDelta = _mouseDelta * (5 * Time.fixedDeltaTime);
+        var tempMouseDelta = delta * (5 * Time.fixedDeltaTime);
 
         var startEulerAngles = myTransform.eulerAngles;
         var startRotation = Quaternion.Euler(startEulerAngles.x, startEulerAngles.y, 0);
@@ -114,48 +86,59 @@ public class OrbitCamera : MonoBehaviour
         myTransform.rotation = Quaternion.Slerp(startRotation, endRotation, 0.5f);
     }
 
-    private void OnRightMouseMove(InputAction.CallbackContext context)
+    private void OnMouseMove(Vector2 mouseDelta)
     {
-        _mouseDelta = context.action.ReadValue<Vector2>();
+        if (_inputHandler.isRightClicked)
+        {
+            Rotate(mouseDelta);
+        }
     }
 
-    private void OnMouseMove(InputAction.CallbackContext context)
+    private void OnLeftClick(Vector2 mousePosition)
     {
-        _mousePosition = context.action.ReadValue<Vector2>();
-    }
+        print(mousePosition);
+        var ray = _camera.ScreenPointToRay(mousePosition);
+        _leftClickRay = ray;
+        _editedClickRay =
+            new Ray(ray.origin,
+                Matrix4x4.Rotate(Quaternion.Euler(transform.right * editAngle)).MultiplyVector(ray.direction));
+        _leftClickWorldPosition = _camera.ScreenToWorldPoint(mousePosition);
 
-    private void OnLeftClick(InputAction.CallbackContext context)
-    {
-        var ray = Camera.main!.ScreenPointToRay(_mousePosition);
-
-        leftClickPosition = transform.position;
-        leftClickDirection = ray.direction;
-
-        if (Physics.Raycast(ray, out var hit))
+        if (Physics.Raycast(_editedClickRay, out var hit, Camera.main!.farClipPlane))
         {
             print($"target set {hit.collider.gameObject.name}");
 
             Target = hit.collider.gameObject;
         }
+
+        if (Physics.Raycast(ray, out var hitEdit))
+        {
+            print($"Just target set {hitEdit.collider.gameObject.name}");
+        }
     }
 
-    private void OnRightClick(InputAction.CallbackContext context)
+    private void OnVerticalScroll(float scroll)
     {
-        _rightClicked = context.phase != InputActionPhase.Canceled;
-    }
-
-    private void OnScrollMouse(InputAction.CallbackContext context)
-    {
-        var tempScroll = _distanceToTarget - context.action.ReadValue<Vector2>().y * Time.fixedDeltaTime;
+        var tempScroll = _distanceToTarget - scroll * Time.deltaTime;
         _distanceToTarget = ValidateDistance(tempScroll);
     }
 
     private float ValidateDistance(float distance) => distance > _minScrollDistance ? distance : _minScrollDistance;
 
+    private void OnDestroy()
+    {
+        _inputHandler.OnLeftClick -= OnLeftClick;
+        _inputHandler.OnVerticalScroll -= OnVerticalScroll;
+        _inputHandler.OnMouseMove -= OnMouseMove;
+    }
+
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;
-        Gizmos.DrawRay(leftClickPosition, leftClickPosition + leftClickDirection * 10000);
+        Gizmos.DrawRay(_leftClickRay.origin, _leftClickRay.origin + _leftClickRay.direction * 10000);
+        Gizmos.DrawSphere(_leftClickWorldPosition, 5f);
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawRay(_editedClickRay.origin, _editedClickRay.origin + _editedClickRay.direction * 10000);
     }
 }

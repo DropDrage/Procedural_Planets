@@ -17,12 +17,11 @@ namespace PlanetSystemGenerators
         [SerializeField] private IntRange planetCountRange;
 
         [SerializeField] private Vector3 center;
-        [SerializeField] private PlanetGenerator planetGenerator;
-        [SerializeField] private SunGenerator sunGenerator;
+        [SerializeField] private PlanetParametersGenerator planetParametersGenerator;
+        [SerializeField] private SunParametersGenerator sunParametersGenerator;
 
-        [Space(20)]
-        [Range(0, int.MaxValue)]
-        [SerializeField] private int seed = 1;
+        [Space(20)] [Range(0, int.MaxValue)] [SerializeField]
+        private int seed = 1;
 
 
         public void Generate()
@@ -36,7 +35,7 @@ namespace PlanetSystemGenerators
 
             for (var i = 0; i < gravityBodies.Length; i++)
             {
-                gravityBodies[i] = planetGenerator.Generate();
+                gravityBodies[i] = planetParametersGenerator.Generate();
             }
 
             var orderedBodies = gravityBodies.OrderBy(body => body.radius * body.Mass).ToList();
@@ -44,7 +43,7 @@ namespace PlanetSystemGenerators
 
             foreach (var gravityBody in orderedBodies)
             {
-                var nextOrbit = orbitDistanceRadius.RandomValue + sunGenerator.planetRadiusRange.to;
+                var nextOrbit = orbitDistanceRadius.RandomValue + sunParametersGenerator.planetRadiusRange.to;
                 //sqrt(G*(m1 + m2)/ r)
                 var bodyTransform = gravityBody.transform;
                 bodyTransform.parent = planetSystem.transform;
@@ -66,10 +65,10 @@ namespace PlanetSystemGenerators
         }
 
         private GravityBody GenerateSun(string systemName, PlanetSystem planetSystem,
-                                        IEnumerable<GravityBody> gravityBodies,
-                                        out Transform sunTransform)
+            IEnumerable<GravityBody> gravityBodies,
+            out Transform sunTransform)
         {
-            var sun = sunGenerator.Generate();
+            var sun = sunParametersGenerator.Generate();
             sunTransform = sun.transform;
             sun.bodyName = $"{systemName} Sun";
             sunTransform.parent = planetSystem.transform;

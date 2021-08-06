@@ -42,38 +42,40 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\PlanetSystemGenerators\PlanetSystemGenerator.cs" />
-     <Compile Include="Assets\Scripts\Planet\FlatTerrainFace.cs" />
      <Compile Include="Assets\Scripts\ConditionalHideAttribute.cs" />
+     <Compile Include="Assets\Scripts\Planet\SunGenerator.cs"/>
      <Compile Include="Assets\Scripts\Utils.cs" />
      <Compile Include="Assets\Scripts\Noise\INoiseFilter.cs" />
      <Compile Include="Assets\Scripts\PlanetSystemGenerators\PlanetGeneratorAbstract.cs" />
      <Compile Include="Assets\Scripts\PlanetSystem.cs" />
-     <Compile Include="Assets\Scripts\Planet\TerrainFace.cs" />
      <Compile Include="Assets\Scripts\Noise\NoiseSettings.cs" />
+     <Compile Include="Assets\Scripts\Planet\PlanetGenerator.cs"/>
      <Compile Include="Assets\Scripts\Noise\NoiseFilterAbstract.cs" />
+     <Compile Include="Assets\Scripts\HighlightOnMouseOver.cs"/>
      <Compile Include="Assets\Scripts\Planet\Settings\ColorSettings.cs" />
      <Compile Include="Assets\Scripts\Planet\ShapeGenerator.cs" />
-     <Compile Include="Assets\Scripts\Planet\Sun.cs" />
-     <Compile Include="Assets\Scripts\MinMax.cs" />
-     <Compile Include="Assets\Scripts\InputActions.cs" />
-     <Compile Include="Assets\Scripts\Universe.cs" />
-     <Compile Include="Assets\Scripts\Noise\SimpleNoiseFilter.cs" />
-     <Compile Include="Assets\Scripts\Noise\NoiseFilterFactory.cs" />
-     <Compile Include="Assets\Scripts\Noise\NoiseGenerator.cs" />
-     <Compile Include="Assets\Scripts\PlanetSystemGenerators\SunGenerator.cs" />
-     <Compile Include="Assets\Scripts\OrbitCamera.cs" />
-     <Compile Include="Assets\Scripts\PlanetSystemGenerators\PlanetGenerator.cs" />
-     <Compile Include="Assets\Scripts\Noise\RidgidNoiseFilter.cs" />
-     <Compile Include="Assets\Scripts\Planet\Settings\ShapeSettings.cs" />
-     <Compile Include="Assets\Scripts\Planet\Planet.cs" />
-     <Compile Include="Assets\Scripts\Range.cs" />
-     <Compile Include="Assets\Scripts\Planet\ColorGenerator.cs" />
-     <Compile Include="Assets\Scripts\GravityBody.cs" />
+     <Compile Include="Assets\Scripts\Planet\TerrainFaceGenerator.cs"/>
+     <Compile Include="Assets\Scripts\MinMax.cs"/>
+     <Compile Include="Assets\Scripts\PlanetSystemGenerators\SunParametersGenerator.cs"/>
+     <Compile Include="Assets\Scripts\InputActions.cs"/>
+     <Compile Include="Assets\Scripts\Universe.cs"/>
+     <Compile Include="Assets\Scripts\Noise\SimpleNoiseFilter.cs"/>
+     <Compile Include="Assets\Scripts\Noise\NoiseFilterFactory.cs"/>
+     <Compile Include="Assets\Scripts\Noise\NoiseGenerator.cs"/>
+     <Compile Include="Assets\Scripts\OrbitCamera.cs"/>
+     <Compile Include="Assets\Scripts\Noise\RidgidNoiseFilter.cs"/>
+     <Compile Include="Assets\Scripts\Planet\Settings\ShapeSettings.cs"/>
+     <Compile Include="Assets\Scripts\InputHandler.cs"/>
+     <Compile Include="Assets\Scripts\Planet\FlatTerrainFaceGenerator.cs"/>
+     <Compile Include="Assets\Scripts\Range.cs"/>
+     <Compile Include="Assets\Scripts\Planet\ColorGenerator.cs"/>
+     <Compile Include="Assets\Scripts\PlanetSystemGenerators\PlanetParametersGenerator.cs"/>
+     <Compile Include="Assets\Scripts\GravityBody.cs"/>
      <Reference Include="UnityEngine">
-     <HintPath>/home/dropdrage/Programs/UnityEditors/2021.1.16f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
+        <HintPath>/home/dropdrage/Programs/UnityEditors/2021.1.16f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
      </Reference>
      <Reference Include="UnityEngine.AIModule">
-     <HintPath>/home/dropdrage/Programs/UnityEditors/2021.1.16f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
+        <HintPath>/home/dropdrage/Programs/UnityEditors/2021.1.16f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
      </Reference>
      <Reference Include="UnityEngine.AccessibilityModule">
      <HintPath>/home/dropdrage/Programs/UnityEditors/2021.1.16f1/Editor/Data/Managed/UnityEngine/UnityEngine.AccessibilityModule.dll</HintPath>

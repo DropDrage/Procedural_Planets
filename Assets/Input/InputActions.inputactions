@@ -291,9 +291,9 @@
         },
         {
           "name": "Click",
-          "type": "Button",
+          "type": "PassThrough",
           "id": "178125bd-bb9e-4b83-b445-2b4e19698968",
-          "expectedControlType": "Button",
+          "expectedControlType": "Vector2",
           "processors": "",
           "interactions": "Press"
         },
