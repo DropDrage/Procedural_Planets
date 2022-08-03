@@ -1,13 +1,14 @@
-using PlanetSystemGenerators;
+using Planet.Common;
 using UnityEditor;
 using UnityEngine;
 
 namespace Editor
 {
-    [CustomEditor(typeof(PlanetSystemGenerator))]
+    [CustomEditor(typeof(BasePlanetSystemGenerator), true)]
     public class PlanetSystemGeneratorEditor : UnityEditor.Editor
     {
-        private PlanetSystemGenerator _generator;
+        private BasePlanetSystemGenerator _generator;
+
 
         public override void OnInspectorGUI()
         {
@@ -22,7 +23,7 @@ namespace Editor
 
         private void OnEnable()
         {
-            _generator = target as PlanetSystemGenerator;
+            _generator = target as BasePlanetSystemGenerator;
         }
     }
 }

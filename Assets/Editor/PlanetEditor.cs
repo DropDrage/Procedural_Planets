@@ -1,14 +1,15 @@
 using System;
+using Planet.Generation;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Editor
 {
-    [CustomEditor(typeof(PlanetGenerator), true)]
+    [CustomEditor(typeof(PlanetAutoGenerator), true)]
     public class PlanetEditor : UnityEditor.Editor
     {
-        private PlanetGenerator _planetGenerator;
+        private PlanetAutoGenerator _planetGenerator;
 
         private UnityEditor.Editor _shapeEditor;
         private UnityEditor.Editor _colourEditor;
@@ -70,7 +71,7 @@ namespace Editor
 
         private void OnEnable()
         {
-            _planetGenerator = target as PlanetGenerator;
+            _planetGenerator = target as PlanetAutoGenerator;
         }
     }
 }

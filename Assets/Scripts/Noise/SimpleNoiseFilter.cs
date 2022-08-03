@@ -6,10 +6,12 @@ namespace Noise
     {
         private NoiseSettings.SimpleNoiseSettings _settings;
 
+
         public SimpleNoiseFilter(NoiseSettings.SimpleNoiseSettings settings)
         {
             _settings = settings;
         }
+
 
         public override float Evaluate(Vector3 point)
         {

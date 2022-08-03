@@ -2,35 +2,38 @@ using Noise;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "ShapeSettings", menuName = "Planet Shape", order = 0)]
-public class ShapeSettings : ScriptableObject
+namespace Planet.Settings
 {
-    public float planetRadius = 1;
-    [FormerlySerializedAs("NoiseLayers")] public NoiseLayer[] noiseLayers;
-
-
-    public ShapeSettings(float planetRadius, NoiseLayer[] noiseLayers)
+    [CreateAssetMenu(fileName = "ShapeSettings", menuName = "Planet Shape", order = 0)]
+    public class ShapeSettings : ScriptableObject
     {
-        this.planetRadius = planetRadius;
-        this.noiseLayers = noiseLayers;
-    }
+        public float planetRadius = 1;
+        [FormerlySerializedAs("NoiseLayers")] public NoiseLayer[] noiseLayers;
 
 
-    [System.Serializable]
-    public class NoiseLayer
-    {
-        public bool isEnabled;
-        public bool useFirstLayerAsMask;
-
-        [FormerlySerializedAs("NoiseSettings")]
-        public NoiseSettings noiseSettings;
-
-
-        public NoiseLayer(bool useFirstLayerAsMask, NoiseSettings noiseSettings, bool isEnabled = true)
+        public ShapeSettings(float planetRadius, NoiseLayer[] noiseLayers)
         {
-            this.isEnabled = isEnabled;
-            this.useFirstLayerAsMask = useFirstLayerAsMask;
-            this.noiseSettings = noiseSettings;
+            this.planetRadius = planetRadius;
+            this.noiseLayers = noiseLayers;
+        }
+
+
+        [System.Serializable]
+        public class NoiseLayer
+        {
+            public bool isEnabled;
+            public bool useFirstLayerAsMask;
+
+            [FormerlySerializedAs("NoiseSettings")]
+            public NoiseSettings noiseSettings;
+
+
+            public NoiseLayer(bool useFirstLayerAsMask, NoiseSettings noiseSettings, bool isEnabled = true)
+            {
+                this.isEnabled = isEnabled;
+                this.useFirstLayerAsMask = useFirstLayerAsMask;
+                this.noiseSettings = noiseSettings;
+            }
         }
     }
 }

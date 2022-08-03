@@ -3,7 +3,7 @@ using Noise;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace Settings
+namespace Planet.Settings
 {
     [CreateAssetMenu(fileName = "ColorSettings", menuName = "Planet Color", order = 0)]
     public class ColorSettings : ScriptableObject
@@ -34,7 +34,7 @@ namespace Settings
 
 
             public BiomeColorSettings(Biome[] biomes, NoiseSettings noise, float noiseOffset, float noiseStrength,
-                                      float blendAmount)
+                float blendAmount)
             {
                 this.biomes = biomes;
                 this.noise = noise;

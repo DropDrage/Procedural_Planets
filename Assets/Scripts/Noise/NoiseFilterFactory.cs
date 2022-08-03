@@ -4,12 +4,11 @@ namespace Noise
 {
     public static class NoiseFilterFactory
     {
-        public static INoiseFilter CreateNoiseFilter(NoiseSettings settings) =>
-            settings.filterType switch
-            {
-                NoiseSettings.FilterType.Simple => new SimpleNoiseFilter(settings.simpleNoiseSettings),
-                NoiseSettings.FilterType.Rigid => new RidgidNoiseFilter(settings.rigidNoiseSettings),
-                _ => throw new ArgumentOutOfRangeException(),
-            };
+        public static INoiseFilter CreateNoiseFilter(NoiseSettings settings) => settings.filterType switch
+        {
+            NoiseSettings.FilterType.Simple => new SimpleNoiseFilter(settings.simpleNoiseSettings),
+            NoiseSettings.FilterType.Rigid => new RidgidNoiseFilter(settings.rigidNoiseSettings),
+            _ => throw new ArgumentOutOfRangeException(),
+        };
     }
 }

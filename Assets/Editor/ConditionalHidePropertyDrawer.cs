@@ -1,5 +1,6 @@
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
+using Utils;
 
 namespace Editor
 {
@@ -35,7 +36,7 @@ namespace Editor
         }
 
         private static bool GetConditionalHideAttributeResult(ConditionalHideAttribute condHAtt,
-                                                              SerializedProperty property)
+            SerializedProperty property)
         {
             SerializedProperty sourcePropertyValue;
 

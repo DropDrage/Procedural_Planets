@@ -1,6 +1,6 @@
 using System;
-using Editor;
 using UnityEngine;
+using Utils;
 
 namespace Noise
 {
@@ -9,7 +9,8 @@ namespace Noise
     {
         public enum FilterType
         {
-            Simple, Rigid,
+            Simple,
+            Rigid,
         }
 
         public FilterType filterType;
@@ -22,7 +23,7 @@ namespace Noise
 
 
         public NoiseSettings(FilterType filterType, SimpleNoiseSettings simpleNoiseSettings,
-                             RigidNoiseSettings rigidNoiseSettings)
+            RigidNoiseSettings rigidNoiseSettings)
         {
             this.filterType = filterType;
             this.simpleNoiseSettings = simpleNoiseSettings;
@@ -48,7 +49,7 @@ namespace Noise
 
 
             public SimpleNoiseSettings(float strength, int layersCount, float baseRoughness, float roughness,
-                                       float persistence, Vector3 center, float minValue)
+                float persistence, Vector3 center, float minValue)
             {
                 this.strength = strength;
                 this.layersCount = layersCount;
@@ -60,7 +61,7 @@ namespace Noise
             }
 
 
-            public RigidNoiseSettings ToRigid(float weight) => new RigidNoiseSettings(this, weight);
+            public RigidNoiseSettings ToRigid(float weight) => new(this, weight);
         }
 
         [Serializable]

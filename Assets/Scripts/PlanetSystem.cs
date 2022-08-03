@@ -1,4 +1,6 @@
+using Planet;
 using UnityEngine;
+using Utils;
 
 public class PlanetSystem : MonoBehaviour
 {
@@ -9,7 +11,19 @@ public class PlanetSystem : MonoBehaviour
     {
         foreach (var body in bodies)
         {
-            body.AddAttraction(bodies);
+            var attraction = Vector3.zero;
+            foreach (var otherBody in bodies)
+            {
+                if (otherBody != body)
+                {
+                    var distance = otherBody.Position - body.Position;
+                    var sqrDst = distance.sqrMagnitude;
+                    var forceDir = distance.normalized;
+
+                    attraction += forceDir * (Universe.GravitationConstant * (body.Mass * otherBody.Mass)) / sqrDst;
+                }
+            }
+            body.AddAttraction(attraction);
         }
     }
 }

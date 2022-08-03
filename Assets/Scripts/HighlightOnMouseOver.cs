@@ -1,6 +1,6 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using UnityEngine;
 
 [RequireComponent(typeof(InputHandler))]
@@ -8,10 +8,12 @@ public class HighlightOnMouseOver : MonoBehaviour
 {
     [SerializeField] private Material highlightMaterial;
 
-    [CanBeNull] private GameObject _highlightedTarget;
-    [CanBeNull] private List<MeshRenderer> _highlightedMeshRenderers;
+    private GameObject? _highlightedTarget;
+    private List<MeshRenderer>? _highlightedMeshRenderers;
 
-    private List<MeshRenderer> HighlightedMeshRenderers
+    private Camera _camera;
+
+    private List<MeshRenderer>? HighlightedMeshRenderers
     {
         set
         {
@@ -32,6 +34,7 @@ public class HighlightOnMouseOver : MonoBehaviour
 
     private void Awake()
     {
+        _camera = Camera.main!;
         _inputHandler = GetComponent<InputHandler>();
     }
 
@@ -43,40 +46,32 @@ public class HighlightOnMouseOver : MonoBehaviour
             return;
         }
 
-        var ray = Camera.main!.ScreenPointToRay(_inputHandler.mousePosition);
-        if (!Physics.Raycast(ray, out var hit, Camera.main.farClipPlane))
+        var ray = _camera.ScreenPointToRay(_inputHandler.mousePosition);
+        if (!Physics.Raycast(ray, out var hit, _camera.farClipPlane))
         {
             ResetTarget();
             return;
         }
 
-        var meshRenderers = new List<MeshRenderer>(6);
         var target = hit.collider.gameObject;
-        target.GetComponentsInChildren(meshRenderers);
-        if (meshRenderers.Count == 0)
-        {
-            ResetTarget();
-            return;
-        }
-
-
         if (target != _highlightedTarget)
         {
+            var meshRenderers = new List<MeshRenderer>(6);
+            target.GetComponentsInChildren(meshRenderers);
+            if (meshRenderers.Count == 0)
+            {
+                ResetTarget();
+                return;
+            }
+
             foreach (var meshRenderer in meshRenderers)
             {
                 AddHighlightMaterial(meshRenderer);
             }
 
             SetTarget(target, meshRenderers);
-            print("Highlight " + hit.collider.gameObject.name);
+            print($"Highlight {hit.collider.gameObject.name}");
         }
-    }
-
-
-    private void SetTarget(GameObject target, List<MeshRenderer> meshRenderers)
-    {
-        _highlightedTarget = target;
-        HighlightedMeshRenderers = meshRenderers;
     }
 
     private void ResetTarget()
@@ -84,6 +79,11 @@ public class HighlightOnMouseOver : MonoBehaviour
         SetTarget(null, null);
     }
 
+    private void SetTarget(GameObject? target, List<MeshRenderer>? meshRenderers)
+    {
+        _highlightedTarget = target;
+        HighlightedMeshRenderers = meshRenderers;
+    }
 
     private void AddHighlightMaterial(Renderer targetRenderer)
     {
