@@ -1,0 +1,39 @@
+.tab-button {
+    height: 92px;
+    width: 92px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 12px;
+    margin-bottom: 0;
+    background-image: none;
+    background-color: rgb(109, 122, 255);
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    -unity-slice-left: 0;
+    -unity-slice-top: 0;
+    -unity-slice-right: 0;
+    -unity-slice-bottom: 0;
+    -unity-background-scale-mode: stretch-to-fill;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+.tab-button:hover {
+    background-color: rgb(167, 175, 255);
+}
+
+.tab-button:active {
+    background-color: rgb(93, 103, 200);
+}
+
+.menu-background {
+    background-color: rgba(58, 58, 58, 0.5);
+}

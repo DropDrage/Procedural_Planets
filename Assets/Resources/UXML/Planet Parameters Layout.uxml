@@ -1,0 +1,63 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/Styles/root.uss?fileID=7433441132597879392&amp;guid=604ed172c5884370b60ab1f0fd5361f4&amp;type=3#root"/>
+    <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" horizontal-scroller-visibility="Hidden">
+        <ui:MinMaxSlider picking-mode="Ignore" label="Planet Radius" min-value="1.5" max-value="40" low-limit="0.5"
+                         high-limit="100" tabindex="0" name="PlanetRadius" class="text-medium"
+                         style="overflow: hidden;"/>
+        <ui:MinMaxSlider picking-mode="Ignore" label="Noise Layers count" min-value="3" max-value="8" low-limit="1"
+                         high-limit="12" tabindex="0" name="NoiseLayersCount" class="text-medium"
+                         style="overflow: hidden;"/>
+        <ui:Foldout text="Noise" name="Noise" class="h5 fold-header fold" style="-unity-font-style: bold;">
+            <ui:MinMaxSlider picking-mode="Ignore" label="Layers In Noise count" min-value="2" max-value="10"
+                             low-limit="1" high-limit="16" tabindex="0" name="LayersInNoiseCount" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Base Roughness" min-value="0.22" max-value="2.2" low-limit="0"
+                             high-limit="4" tabindex="0" name="BaseRoughness" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Roughness" min-value="0.5" max-value="3.5" low-limit="0.1"
+                             high-limit="6" tabindex="0" name="Roughness" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Persistence" min-value="0.5" max-value="3.5" low-limit="0.1"
+                             high-limit="3" tabindex="0" name="Persistence" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Center Magnitude" min-value="0.15" max-value="17.72"
+                             low-limit="-100" high-limit="100" tabindex="0" name="CenterMagnitude" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Weight" min-value="0.15" max-value="17.72" low-limit="-100"
+                             high-limit="100" tabindex="0" name="Weight" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Strength " min-value="-0.3" max-value="2.1" low-limit="-1"
+                             high-limit="3" tabindex="0" name="Strength" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+        </ui:Foldout>
+        <ui:Foldout text="Gravity" value="true" name="Gravity" class="fold-header fold"
+                    style="-unity-font-style: bold;">
+            <ui:MinMaxSlider picking-mode="Ignore" label="Angular Velocity" min-value="0.05" max-value="10"
+                             low-limit="0" high-limit="15" tabindex="0" name="AngularVelocity" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Mass Multiplier" min-value="0.75" max-value="7.5"
+                             low-limit="0.1" high-limit="15" tabindex="0" name="MassMultiplier" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+        </ui:Foldout>
+        <ui:Foldout text="Biomes" value="true" name="Biomes" class="fold-header fold" style="-unity-font-style: bold;">
+            <ui:MinMaxSlider picking-mode="Ignore" label="Count" min-value="2" max-value="6" low-limit="1"
+                             high-limit="12" tabindex="0" name="BiomeCount" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Color Count" min-value="2" max-value="9" low-limit="1"
+                             high-limit="15" tabindex="0" name="BiomeColorCount" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Noise Offset" min-value="0.26" max-value="1.29" low-limit="0"
+                             high-limit="5" tabindex="0" name="BiomeNoiseOffset" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Strength" min-value="0.15" max-value="1.57" low-limit="0.1"
+                             high-limit="5" tabindex="0" name="BiomeStrength" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Blend" min-value="0.15" max-value="0.9" low-limit="0"
+                             high-limit="1" tabindex="0" name="BiomeBlend" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+            <ui:MinMaxSlider picking-mode="Ignore" label="Ocean Color Count" min-value="1" max-value="5" low-limit="1"
+                             high-limit="10" tabindex="0" name="BiomeOceanColorCount" class="text-medium"
+                             style="overflow: hidden; -unity-font-style: normal;"/>
+        </ui:Foldout>
+    </ui:ScrollView>
+</ui:UXML>

@@ -1,0 +1,31 @@
+.tabs-view {
+    flex-direction: row;
+    transition: 0.25s ease-in-out flex-grow;
+}
+
+.tabs-view__content {
+    padding-left: 8px;
+    padding-right: 8px;
+    /*transition: 0.25s ease-in-out flex-grow;*/
+    /*flex-grow,width,scale,*/
+}
+
+.tab-image-button {
+    width: 48px;
+    height: 48px;
+    padding-bottom: 4px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 4px;
+    margin-bottom: 0;
+    margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.tab-image-button--active {
+    color: aliceblue;
+}
+
+.not-tab {
+}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using UnityEngine;
 
 namespace Utils.Extensions
 {
@@ -33,5 +34,9 @@ namespace Utils.Extensions
         [Pure]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int LastIndex<T>(this IEnumerable<T> list) => list.Count() - 1;
+
+
+        [Pure]
+        public static T GetRandomItem<T>(this IList<T> list) => list[Random.Range(0, list.Count)];
     }
 }

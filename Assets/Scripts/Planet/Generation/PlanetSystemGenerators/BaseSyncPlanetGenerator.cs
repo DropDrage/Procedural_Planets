@@ -2,13 +2,15 @@ using System;
 using Noise;
 using Planet.Common;
 using Planet.Settings;
+using Planet.Settings.Generation;
 using UnityEngine;
 using Utils;
 using Random = UnityEngine.Random;
 
 namespace Planet.Generation.PlanetSystemGenerators
 {
-    public abstract class BaseSyncPlanetGenerator : BasePlanetGenerator
+    [Obsolete("Use async")]
+    public abstract class BaseSyncPlanetGenerator<T> : BasePlanetGenerator<T> where T : BasePlanetGenerationParameters
     {
         public GravityBody Generate()
         {
@@ -27,7 +29,7 @@ namespace Planet.Generation.PlanetSystemGenerators
 
         private void GenerateShape(PlanetAutoGenerator planet)
         {
-            var noiseLayers = new ShapeSettings.NoiseLayer[noiseLayersRange.RandomValue];
+            var noiseLayers = new ShapeSettings.NoiseLayer[parameters.noiseLayersRange.RandomValue];
             for (int i = 0, noiseSettingsLength = noiseLayers.Length + 1; i < noiseLayers.Length; i++)
             {
                 noiseLayers[i] = new ShapeSettings.NoiseLayer(
@@ -37,9 +39,11 @@ namespace Planet.Generation.PlanetSystemGenerators
             }
 
             planet.shapeSettings = ScriptableObject.CreateInstance<ShapeSettings>();
-            planet.shapeSettings.planetRadius = Random.Range(planetRadiusRange.from, planetRadiusRange.to);
+            planet.shapeSettings.planetRadius =
+                Random.Range(parameters.planetRadiusRange.from, parameters.planetRadiusRange.to);
             planet.shapeSettings.noiseLayers = noiseLayers;
-            planet.resolution = Mathf.FloorToInt(planet.shapeSettings.planetRadius / planetRadiusRange.to * 256);
+            planet.resolution =
+                Mathf.FloorToInt(planet.shapeSettings.planetRadius / parameters.planetRadiusRange.to * 256);
         }
 
         private void GenerateColor(PlanetAutoGenerator planet)
@@ -55,8 +59,9 @@ namespace Planet.Generation.PlanetSystemGenerators
             var planetRigidbody = planet.GetComponent<Rigidbody>();
             planetRigidbody.mass = planet.shapeSettings.planetRadius
                                    * planet.shapeSettings.planetRadius
-                                   * massMultiplierRange.RandomValue;
-            planetRigidbody.AddTorque(Random.onUnitSphere * angularVelocityRange.RandomValue, ForceMode.VelocityChange);
+                                   * parameters.massMultiplierRange.RandomValue;
+            planetRigidbody.AddTorque(Random.onUnitSphere * parameters.angularVelocityRange.RandomValue,
+                ForceMode.VelocityChange);
         }
 
         protected abstract ColorSettings.BiomeColorSettings GenerateBiomeSettings();
@@ -81,22 +86,22 @@ namespace Planet.Generation.PlanetSystemGenerators
             var filterType =
                 (NoiseSettings.FilterType) Mathf.FloorToInt(
                     Random.Range(0f, Enum.GetValues(typeof(NoiseSettings.FilterType)).Length - 0.75f));
-            var layersCount = Mathf.CeilToInt(layersInNoiseCountRange.RandomValue * limitModifier);
-            var strength = strengthRange.RandomValue * limitModifier / layersCount;
+            var layersCount = Mathf.CeilToInt(parameters.layersInNoiseCountRange.RandomValue * limitModifier);
+            var strength = parameters.strengthRange.RandomValue * limitModifier / layersCount;
             var simpleNoiseSettings = new NoiseSettings.SimpleNoiseSettings(
                 strength,
                 layersCount,
-                baseRoughnessRange.RandomValue * limitModifier,
-                roughnessRange.RandomValue * limitModifier,
-                persistenceRange.RandomValue * limitModifier,
-                Random.onUnitSphere * centerMagnitudeRange.RandomValue,
+                parameters.baseRoughnessRange.RandomValue * limitModifier,
+                parameters.roughnessRange.RandomValue * limitModifier,
+                parameters.persistenceRange.RandomValue * limitModifier,
+                Random.onUnitSphere * parameters.centerMagnitudeRange.RandomValue,
                 strength * zeroOneRange.RandomValue * downModifier
             );
 
             NoiseSettings.RigidNoiseSettings rigidNoiseSettings = null;
             if (filterType == NoiseSettings.FilterType.Rigid)
             {
-                rigidNoiseSettings = simpleNoiseSettings.ToRigid(weightRange.RandomValue);
+                rigidNoiseSettings = simpleNoiseSettings.ToRigid(parameters.weightRange.RandomValue);
             }
 
             return new NoiseSettings(filterType, simpleNoiseSettings, rigidNoiseSettings);

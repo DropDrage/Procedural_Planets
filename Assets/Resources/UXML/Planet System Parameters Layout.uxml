@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/Styles/root.uss?fileID=7433441132597879392&amp;guid=604ed172c5884370b60ab1f0fd5361f4&amp;type=3#root"/>
+    <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1">
+        <ui:MinMaxSlider picking-mode="Ignore" label="Name Length" min-value="2" max-value="11" low-limit="1"
+                         high-limit="20" name="NameLength" class="text-medium"/>
+        <ui:MinMaxSlider picking-mode="Ignore" label="Orbit Distance Radius" min-value="2.5" max-value="15"
+                         low-limit="2.5" high-limit="25" name="OrbitDistanceRadius"/>
+        <ui:MinMaxSlider picking-mode="Ignore" label="Planet Count" min-value="3" max-value="12" low-limit="1"
+                         high-limit="24" name="PlanetCount" class="text-medium"/>
+        <ui:SliderInt picking-mode="Ignore" label="Seed" value="1" high-value="2147483647" show-input-field="true"
+                      name="Seed" class="text-medium" style="margin-top: 10px;"/>
+    </ui:ScrollView>
+</ui:UXML>

@@ -1,19 +1,16 @@
 using Noise;
 using Planet.Settings;
+using Planet.Settings.Generation;
 using UnityEngine;
 using Utils;
 
 namespace Planet.Generation_Async.PlanetSystemGenerators
 {
-    public class SunParametersGeneratorAsync : BaseAsyncPlanetGenerator
+    public class SunParametersGeneratorAsync : BaseAsyncPlanetGenerator<SunGenerationParameters>
     {
         private const float ForwardColorLimit = 55 / 360f;
         private const float BackwardColorLimit = 170 / 360f;
         private const float RotatedColorLimit = ForwardColorLimit + BackwardColorLimit;
-
-
-        [SerializeField] private IntRange biomeOceanColorCountRange;
-        [SerializeField] private FloatRange lightIntensityRange;
 
         private Color _sunColor;
 
@@ -37,7 +34,7 @@ namespace Planet.Generation_Async.PlanetSystemGenerators
 
         protected override Gradient GenerateOceanGradientAsync(System.Random random)
         {
-            var oceanColorKeys = new GradientColorKey[biomeOceanColorCountRange.GetRandomValue(random)];
+            var oceanColorKeys = new GradientColorKey[parameters.biomeOceanColorCountRange.GetRandomValue(random)];
 
             var time = random.NextFloat();
             Color.RGBToHSV(_sunColor, out var h, out var s, out var v);
@@ -81,7 +78,7 @@ namespace Planet.Generation_Async.PlanetSystemGenerators
             sunLight.color = Color.HSVToRGB(h, s, v);
 
             var gravityBody = planet.GetComponent<GravityBody>();
-            sunLight.intensity = lightIntensityRange.GetRandomValue(random);
+            sunLight.intensity = parameters.lightIntensityRange.GetRandomValue(random);
             sunLight.range = gravityBody.Mass * 100;
         }
     }

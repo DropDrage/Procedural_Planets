@@ -1,10 +1,14 @@
+using System;
 using System.Linq;
 using Planet.Common;
+using Planet.Settings.Generation;
 using UnityEngine;
 using Utils;
+using Random = UnityEngine.Random;
 
 namespace Planet.Generation.PlanetSystemGenerators
 {
+    [Obsolete("Use async")]
     public class PlanetSystemGenerator : BasePlanetSystemGenerator
     {
         [SerializeField] private bool withSun = true;
@@ -13,16 +17,26 @@ namespace Planet.Generation.PlanetSystemGenerators
         [SerializeField] protected SunParametersGenerator sunParametersGenerator;
 
 
-        public override void Generate()
+        public override void SetGenerationParameters(PlanetGenerationParameters planetParameters,
+            SunGenerationParameters sunParameters,
+            PlanetSystemGenerationParameters planetSystemParameters, int seed)
+        {
+            planetParametersGenerator.parameters = planetParameters;
+            sunParametersGenerator.parameters = sunParameters;
+            parameters = planetSystemParameters;
+            this.seed = seed;
+        }
+
+        public override void Generate(int seed)
         {
             Random.InitState(seed);
 
             var planetSystem = SpawnUtils.SpawnPrefab(planetSystemPrefab).GetComponent<PlanetSystem>();
             planetSystem.gameObject.SetActive(true);
             var planetSystemTransform = planetSystem.transform;
-            planetSystemTransform.position = center;
+            planetSystemTransform.position = parameters.center;
 
-            var gravityBodies = new GravityBody[planetCountRange.RandomValue];
+            var gravityBodies = new GravityBody[parameters.planetCountRange.RandomValue];
             for (var i = 0; i < gravityBodies.Length; i++)
             {
                 gravityBodies[i] = planetParametersGenerator.Generate();
@@ -40,7 +54,8 @@ namespace Planet.Generation.PlanetSystemGenerators
             var orderedBodies = gravityBodies.OrderBy(body => body.radius * body.Mass).ToArray();
             foreach (var gravityBody in orderedBodies)
             {
-                var nextOrbit = orbitDistanceRadius.RandomValue + sunParametersGenerator.planetRadiusRange.to;
+                var nextOrbit = parameters.orbitDistanceRadius.RandomValue +
+                                sunParametersGenerator.parameters.planetRadiusRange.to;
                 //sqrt(G*(m1 + m2)/ r)
                 var bodyTransform = gravityBody.transform;
                 bodyTransform.parent = planetSystemTransform;

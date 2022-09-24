@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Planet.Common;
+using Planet.Settings.Generation;
 using UnityEngine;
 using Utils;
 
@@ -8,11 +9,21 @@ namespace Planet.Generation_Async.PlanetSystemGenerators
 {
     public class PlanetSystemGeneratorAsync : BasePlanetSystemGenerator
     {
+        [Space]
         [SerializeField] protected PlanetParametersGeneratorAsync planetParametersGenerator;
         [SerializeField] protected SunParametersGeneratorAsync sunParametersGenerator;
 
 
-        public override async void Generate()
+        public override void SetGenerationParameters(PlanetGenerationParameters planetParameters,
+            SunGenerationParameters sunParameters, PlanetSystemGenerationParameters planetSystemParameters, int seed)
+        {
+            planetParametersGenerator.parameters = planetParameters;
+            sunParametersGenerator.parameters = sunParameters;
+            parameters = planetSystemParameters;
+            this.seed = seed;
+        }
+
+        public override async void Generate(int seed)
         {
             Time.timeScale = 0;
             Debug.Log("Generation start");
@@ -22,10 +33,10 @@ namespace Planet.Generation_Async.PlanetSystemGenerators
             planetSystem.enabled = false;
             var systemName = GenerateSystemName(planetSystem.gameObject);
             var planetSystemTransform = planetSystem.transform;
-            planetSystemTransform.position = center;
+            planetSystemTransform.position = parameters.center;
 
             var mainTaskScheduler = TaskScheduler.FromCurrentSynchronizationContext();
-            var gravityBodyTasks = ParallelEnumerable.Range(1, planetCountRange.RandomValue + 1)
+            var gravityBodyTasks = ParallelEnumerable.Range(1, parameters.planetCountRange.RandomValue + 1)
                 .Select(i => planetParametersGenerator.Generate(seed - i, mainTaskScheduler))
                 .ToArray();
 
@@ -41,7 +52,8 @@ namespace Planet.Generation_Async.PlanetSystemGenerators
 
             foreach (var gravityBody in orderedBodies)
             {
-                var nextOrbit = orbitDistanceRadius.RandomValue + sunParametersGenerator.planetRadiusRange.to;
+                var nextOrbit = parameters.orbitDistanceRadius.RandomValue +
+                                sunParametersGenerator.parameters.planetRadiusRange.to;
                 var bodyTransform = gravityBody.transform;
                 bodyTransform.parent = planetSystemTransform;
 

@@ -1,7 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
+using Utils;
 
-namespace Utils
+namespace Planet.Common
 {
     [Serializable]
     public abstract class Range<T>

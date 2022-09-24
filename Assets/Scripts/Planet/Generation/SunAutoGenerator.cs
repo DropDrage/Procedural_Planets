@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace Planet.Generation
 {
+    [Obsolete("Use async")]
     public class SunAutoGenerator : PlanetAutoGenerator
     {
         private const float MinAudioDistanceModifier = 1.1f;

@@ -1,13 +1,13 @@
 using System;
 using Noise;
+using Planet.Settings.Generation;
 using UnityEngine;
-using Utils;
 using Utils.Extensions;
 using Object = UnityEngine.Object;
 
 namespace Planet.Common
 {
-    public abstract class BasePlanetGenerator : MonoBehaviour
+    public abstract class BasePlanetGenerator<T> : MonoBehaviour where T : BasePlanetGenerationParameters
     {
         protected static readonly int FilterTypesLastIndex =
             Enum.GetValues(typeof(NoiseSettings.FilterType)).LastIndex();
@@ -17,25 +17,7 @@ namespace Planet.Common
         [SerializeField] protected Object prefab;
         [SerializeField] protected Shader shader;
 
-        [SerializeField] public FloatRange planetRadiusRange;
-        [SerializeField] protected IntRange noiseLayersRange;
-
-        [Space]
-        [Header("Noise")]
-        [SerializeField] protected FloatRange strengthRange;
-
-        [SerializeField] protected IntRange layersInNoiseCountRange;
-        [SerializeField] protected FloatRange baseRoughnessRange;
-        [SerializeField] protected FloatRange roughnessRange;
-        [SerializeField] protected FloatRange persistenceRange;
-        [SerializeField] protected FloatRange centerMagnitudeRange;
-        [SerializeField] protected FloatRange weightRange;
-
-        [Space]
-        [Header("Gravity")]
-        [SerializeField] protected FloatRange massMultiplierRange;
-
-        [SerializeField] protected FloatRange angularVelocityRange;
+        [SerializeField] public T parameters;
 
 
         private void Awake()

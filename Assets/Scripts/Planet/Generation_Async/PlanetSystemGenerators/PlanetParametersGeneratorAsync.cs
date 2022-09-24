@@ -1,27 +1,18 @@
 using Planet.Settings;
+using Planet.Settings.Generation;
 using UnityEngine;
 using Utils;
 
 namespace Planet.Generation_Async.PlanetSystemGenerators
 {
-    public class PlanetParametersGeneratorAsync : BaseAsyncPlanetGenerator
+    public class PlanetParametersGeneratorAsync : BaseAsyncPlanetGenerator<PlanetGenerationParameters>
     {
-        [Space] [Header("Biomes")] [SerializeField]
-        private IntRange biomesRange;
-
-        [SerializeField] private IntRange biomeColorCountRange;
-        [SerializeField] private FloatRange biomeNoiseOffsetRange;
-        [SerializeField] private FloatRange biomeStrengthRange;
-        [SerializeField] private FloatRange biomeBlendRange;
-        [SerializeField] private IntRange biomeOceanColorCountRange;
-
-
         protected override ColorSettings.BiomeColorSettings GenerateBiomeSettingsAsync(System.Random random)
         {
-            var biomes = new ColorSettings.BiomeColorSettings.Biome[biomesRange.GetRandomValue(random)];
+            var biomes = new ColorSettings.BiomeColorSettings.Biome[parameters.biomesRange.GetRandomValue(random)];
             for (var i = 0; i < biomes.Length; i++)
             {
-                var colorKeys = new GradientColorKey[biomeColorCountRange.GetRandomValue(random)];
+                var colorKeys = new GradientColorKey[parameters.biomeColorCountRange.GetRandomValue(random)];
                 for (var k = 0; k < colorKeys.Length; k++)
                 {
                     colorKeys[k].color = random.ColorHSV(0, 1f, 0.1f, 0.825f);
@@ -35,14 +26,14 @@ namespace Planet.Generation_Async.PlanetSystemGenerators
             }
 
             return new ColorSettings.BiomeColorSettings(biomes, GenerateNoiseSettings(random),
-                biomeNoiseOffsetRange.GetRandomValue(random),
-                biomeStrengthRange.GetRandomValue(random),
-                biomeBlendRange.GetRandomValue(random));
+                parameters.biomeNoiseOffsetRange.GetRandomValue(random),
+                parameters.biomeStrengthRange.GetRandomValue(random),
+                parameters.biomeBlendRange.GetRandomValue(random));
         }
 
         protected override Gradient GenerateOceanGradientAsync(System.Random random)
         {
-            var oceanColorKeys = new GradientColorKey[biomeOceanColorCountRange.GetRandomValue(random)];
+            var oceanColorKeys = new GradientColorKey[parameters.biomeOceanColorCountRange.GetRandomValue(random)];
             for (var k = 0; k < oceanColorKeys.Length; k++)
             {
                 oceanColorKeys[k].color = random.ColorHSV(0.37f, 0.9f, 0.1f, 0.75f);

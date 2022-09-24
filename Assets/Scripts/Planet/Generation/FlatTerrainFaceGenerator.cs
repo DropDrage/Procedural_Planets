@@ -1,8 +1,10 @@
+using System;
 using Planet.Common;
 using UnityEngine;
 
 namespace Planet.Generation
 {
+    [Obsolete("Use async")]
     public class FlatTerrainFaceGenerator : TerrainFaceGenerator
     {
         public FlatTerrainFaceGenerator(ShapeGenerator shapeGenerator, Mesh mesh, int resolution, Vector3 localUp)

@@ -9,21 +9,26 @@ public class PlanetSystem : MonoBehaviour
 
     private void FixedUpdate()
     {
-        foreach (var body in bodies)
+        for (var i = 0; i < bodies.Length; i++)
         {
+            var attractedBody = bodies[i];
+
             var attraction = Vector3.zero;
-            foreach (var otherBody in bodies)
+            for (var otherBodyI = 0; otherBodyI < bodies.Length; otherBodyI++)
             {
-                if (otherBody != body)
+                var attractorBody = bodies[otherBodyI];
+                if (attractorBody != attractedBody) //ToDo swap with first to eliminate this check
                 {
-                    var distance = otherBody.Position - body.Position;
+                    var distance = attractorBody.Position - attractedBody.Position;
                     var sqrDst = distance.sqrMagnitude;
                     var forceDir = distance.normalized;
 
-                    attraction += forceDir * (Universe.GravitationConstant * (body.Mass * otherBody.Mass)) / sqrDst;
+                    // ToDo test without struct recreation
+                    attraction += forceDir *
+                        (Universe.GravitationConstant * (attractedBody.Mass * attractorBody.Mass)) / sqrDst;
                 }
             }
-            body.AddAttraction(attraction);
+            attractedBody.AddAttraction(attraction);
         }
     }
 }

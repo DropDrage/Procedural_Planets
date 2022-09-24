@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4f28bee881479f844dbad2b257f4b3, type: 3}
+  m_Name: Sun Old
+  m_EditorClassIdentifier: 
+  planetRadiusRange:
+    from: 25
+    to: 90
+  noiseLayersRange:
+    from: 1
+    to: 5
+  strengthRange:
+    from: 0.27
+    to: 1.84
+  layersInNoiseCountRange:
+    from: 2
+    to: 6
+  baseRoughnessRange:
+    from: 0.71
+    to: 2.01
+  roughnessRange:
+    from: 1.1
+    to: 2.86
+  persistenceRange:
+    from: 0.53
+    to: 1.56
+  centerMagnitudeRange:
+    from: 0.3
+    to: 4
+  weightRange:
+    from: 0.54
+    to: 1.75
+  angularVelocityRange:
+    from: 0.69
+    to: 10
+  massMultiplierRange:
+    from: 50
+    to: 150
+  biomeOceanColorCountRange:
+    from: 2
+    to: 4
+  lightIntensityRange:
+    from: 450000
+    to: 650000

@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Noise;
 using Planet.Common;
 using Planet.Settings;
+using Planet.Settings.Generation;
 using UnityEngine;
 using Utils;
 using static Utils.AsyncUtils;
@@ -9,7 +10,7 @@ using Random = System.Random;
 
 namespace Planet.Generation_Async.PlanetSystemGenerators
 {
-    public abstract class BaseAsyncPlanetGenerator : BasePlanetGenerator
+    public abstract class BaseAsyncPlanetGenerator<T> : BasePlanetGenerator<T> where T : BasePlanetGenerationParameters
     {
         public async Task<GravityBody> Generate(int seed, TaskScheduler mainScheduler)
         {
@@ -47,7 +48,7 @@ namespace Planet.Generation_Async.PlanetSystemGenerators
 
         private async Task GenerateShape(PlanetAutoGeneratorAsync planet, Random random, TaskScheduler main)
         {
-            var noiseLayers = new ShapeSettings.NoiseLayer[noiseLayersRange.GetRandomValue(random)];
+            var noiseLayers = new ShapeSettings.NoiseLayer[parameters.noiseLayersRange.GetRandomValue(random)];
             for (int i = 0, noiseSettingsLength = noiseLayers.Length + 1; i < noiseLayers.Length; i++)
             {
                 noiseLayers[i] = new ShapeSettings.NoiseLayer(
@@ -58,9 +59,9 @@ namespace Planet.Generation_Async.PlanetSystemGenerators
 
             var shapeSettings = planet.shapeSettings =
                 await RunAsyncWithScheduler(ScriptableObject.CreateInstance<ShapeSettings>, main);
-            shapeSettings.planetRadius = planetRadiusRange.GetRandomValue(random);
+            shapeSettings.planetRadius = parameters.planetRadiusRange.GetRandomValue(random);
             shapeSettings.noiseLayers = noiseLayers;
-            planet.resolution = (int) (shapeSettings.planetRadius / planetRadiusRange.to * 256);
+            planet.resolution = (int) (shapeSettings.planetRadius / parameters.planetRadiusRange.to * 256);
         }
 
         private NoiseSettings GenerateNoiseSettings(int i, int length, Random random)
@@ -75,22 +76,23 @@ namespace Planet.Generation_Async.PlanetSystemGenerators
             float downModifier = 1, float limitModifier = 1)
         {
             var filterType = (NoiseSettings.FilterType) random.Next(0, FilterTypesLastIndex);
-            var layersCount = Mathf.CeilToInt(layersInNoiseCountRange.GetRandomValue(random) * limitModifier);
-            var strength = strengthRange.GetRandomValue(random) * limitModifier / layersCount;
+            var layersCount =
+                Mathf.CeilToInt(parameters.layersInNoiseCountRange.GetRandomValue(random) * limitModifier);
+            var strength = parameters.strengthRange.GetRandomValue(random) * limitModifier / layersCount;
             var simpleNoiseSettings = new NoiseSettings.SimpleNoiseSettings(
                 strength,
                 layersCount,
-                baseRoughnessRange.GetRandomValue(random) * limitModifier,
-                roughnessRange.GetRandomValue(random) * limitModifier,
-                persistenceRange.GetRandomValue(random) * limitModifier,
-                centerMagnitudeRange.GetRandomValue(random) * random.OnUnitSphere(),
+                parameters.baseRoughnessRange.GetRandomValue(random) * limitModifier,
+                parameters.roughnessRange.GetRandomValue(random) * limitModifier,
+                parameters.persistenceRange.GetRandomValue(random) * limitModifier,
+                parameters.centerMagnitudeRange.GetRandomValue(random) * random.OnUnitSphere(),
                 strength * zeroOneRange.GetRandomValue(random) * downModifier
             );
 
             NoiseSettings.RigidNoiseSettings rigidNoiseSettings = null;
             if (filterType == NoiseSettings.FilterType.Rigid)
             {
-                rigidNoiseSettings = simpleNoiseSettings.ToRigid(weightRange.GetRandomValue(random));
+                rigidNoiseSettings = simpleNoiseSettings.ToRigid(parameters.weightRange.GetRandomValue(random));
             }
 
             return new NoiseSettings(filterType, simpleNoiseSettings, rigidNoiseSettings);
@@ -101,8 +103,8 @@ namespace Planet.Generation_Async.PlanetSystemGenerators
             var planetRigidbody = planet.GetComponent<Rigidbody>();
             planetRigidbody.mass = planet.shapeSettings.planetRadius
                                    * planet.shapeSettings.planetRadius
-                                   * massMultiplierRange.GetRandomValue(random);
-            planetRigidbody.AddTorque(random.OnUnitSphere() * angularVelocityRange.GetRandomValue(random),
+                                   * parameters.massMultiplierRange.GetRandomValue(random);
+            planetRigidbody.AddTorque(random.OnUnitSphere() * parameters.angularVelocityRange.GetRandomValue(random),
                 ForceMode.VelocityChange);
         }
 

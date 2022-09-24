@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1926a013d684c58833d918127d0957b, type: 3}
+  m_Name: Planet Old
+  m_EditorClassIdentifier: 
+  planetRadiusRange:
+    from: 1.5
+    to: 40
+  noiseLayersRange:
+    from: 1
+    to: 6
+  strengthRange:
+    from: -0.15
+    to: 2.19
+  layersInNoiseCountRange:
+    from: 1
+    to: 7
+  baseRoughnessRange:
+    from: 0.22
+    to: 1.76
+  roughnessRange:
+    from: 0.5
+    to: 3.29
+  persistenceRange:
+    from: 0.39
+    to: 1.39
+  centerMagnitudeRange:
+    from: 0.15
+    to: 17.72
+  weightRange:
+    from: 0.17
+    to: 1.17
+  angularVelocityRange:
+    from: 0.05
+    to: 10
+  massMultiplierRange:
+    from: 0.75
+    to: 7.5
+  biomesRange:
+    from: 1
+    to: 5
+  biomeColorCountRange:
+    from: 2
+    to: 9
+  biomeNoiseOffsetRange:
+    from: 0.26
+    to: 1.29
+  biomeStrengthRange:
+    from: 0.15
+    to: 1.57
+  biomeBlendRange:
+    from: 0.15
+    to: 0.9
+  biomeOceanColorCountRange:
+    from: 1
+    to: 4

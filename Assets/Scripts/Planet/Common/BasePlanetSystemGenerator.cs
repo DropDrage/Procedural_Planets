@@ -1,6 +1,7 @@
-using System.Text;
+using Camera_Controls;
+using Planet.Settings.Generation;
 using UnityEngine;
-using Utils;
+using Utils.Extensions;
 
 namespace Planet.Common
 {
@@ -12,42 +13,48 @@ namespace Planet.Common
 
         [SerializeField] protected GameObject planetSystemPrefab;
 
-        [Space]
-        [SerializeField] protected IntRange nameLengthRange;
-
-        [SerializeField] protected FloatRange orbitDistanceRadius;
-        [SerializeField] protected IntRange planetCountRange;
-
-        [SerializeField] protected Vector3 center;
+        [SerializeField] protected PlanetSystemGenerationParameters parameters;
 
         [Space]
         [Range(0, int.MaxValue), SerializeField]
         protected int seed = 1;
 
 
-        public abstract void Generate();
+        public abstract void SetGenerationParameters(PlanetGenerationParameters planetParameters,
+            SunGenerationParameters sunParameters, PlanetSystemGenerationParameters planetSystemParameters,
+            int seed);
+
+        public void Generate()
+        {
+            Generate(seed);
+        }
+
+        public abstract void Generate(int seed);
 
 
         protected string GenerateSystemName(GameObject system)
         {
-            var systemName = new StringBuilder();
-            for (int i = 0, length = nameLengthRange.RandomValue; i < length; i++)
+            var lettersCount = parameters.nameLengthRange.RandomValue;
+            var digitsCount = parameters.nameLengthRange.RandomValue;
+            return system.name = string.Create(lettersCount + 1 + digitsCount, lettersCount, (span, nameLength) =>
             {
-                systemName.Append(alphabet[Random.Range(0, alphabet.Length)]);
-            }
+                for (var i = 0; i < nameLength; i++)
+                {
+                    span[i] = alphabet.GetRandomItem();
+                }
 
-            systemName.Append('-');
-            for (int i = 0, length = nameLengthRange.RandomValue; i < length; i++)
-            {
-                systemName.Append(digits[Random.Range(0, digits.Length)]);
-            }
+                span[nameLength] = '-';
 
-            return system.name = systemName.ToString();
+                for (int i = nameLength + 1, length = span.Length; i < length; i++)
+                {
+                    span[i] = digits.GetRandomItem();
+                }
+            });
         }
 
         protected static void SetDefaultTargetForCamera(GameObject target)
         {
-            var mainOrbitCamera = FindObjectOfType<OrbitCamera>();
+            var mainOrbitCamera = FindObjectOfType<OrbitCamera>(); //ToDo serializedField
             if (mainOrbitCamera != null && !mainOrbitCamera.HasTarget)
             {
                 mainOrbitCamera.Target = target;

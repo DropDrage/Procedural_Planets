@@ -1,0 +1,16 @@
+:root {
+    color: white;
+    font-size: 20px;
+}
+
+.fold-header {
+    font-size: 24px;
+}
+
+.fold {
+    margin-top: 10px;
+}
+
+.text-medium {
+    font-size: 20px;
+}

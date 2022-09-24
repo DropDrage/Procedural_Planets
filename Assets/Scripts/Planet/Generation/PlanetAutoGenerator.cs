@@ -1,8 +1,10 @@
+using System;
 using Planet.Common;
 using UnityEngine;
 
 namespace Planet.Generation
 {
+    [Obsolete("Use async")]
     public class PlanetAutoGenerator : Planet
     {
         protected readonly ShapeGenerator shapeGenerator = new();

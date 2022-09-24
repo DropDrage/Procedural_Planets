@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/Styles/drawer-button.uss?fileID=7433441132597879392&amp;guid=d4e74ba9a2b03ad4080ad2d12bdc3d09&amp;type=3#drawer-button"/>
+    <Style src="project://database/Assets/Resources/Styles/root.uss?fileID=7433441132597879392&amp;guid=604ed172c5884370b60ab1f0fd5361f4&amp;type=3#root"/>
+    <Style src="project://database/Assets/Resources/Styles/tabs-view.uss?fileID=7433441132597879392&amp;guid=30ca5fe21f2957c44b5c6a0053a1ca30&amp;type=3#tabs-view"/>
+    <ui:VisualElement
+            style="height: 100%; width: 800px; flex-direction: row; padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px; background-color: rgba(0, 0, 0, 0);">
+        <UI.Tabs_View.TabsView name="TabsView" class="menu-background"
+                               style="flex-grow: 1; background-color: rgba(10, 10, 10, 0.5);">
+            <Planet.UI.Tab.PlanetGenerationParametersTab name="PlanetTab" style="flex-grow: 1;"/>
+            <Planet.UI.Tab.SunGenerationParametersTab name="SunTab" style="flex-grow: 1;"/>
+            <Planet.UI.Tab.PlanetSystemGenerationParametersTab name="PlanetSystemTab" style="flex-grow: 1;"/>
+            <UI.Tabs_View.TabImageButton target-id="PlanetTab" name="PlanetTabButton" class="tab-button"
+                                         style="width: 92px; height: 92px; background-image: url(&apos;project://database/Assets/Texture/Planet.png?fileID=2800000&amp;guid=06a084b8b1cddd24d9aa59599e2810f7&amp;type=3#Planet&apos;);"/>
+            <UI.Tabs_View.TabImageButton target-id="SunTab" name="SunTabButton" class="tab-button"
+                                         style="width: 92px; height: 92px; margin-top: 20px;"/>
+            <UI.Tabs_View.TabImageButton target-id="PlanetSystemTab" name="PlanetSystemTabButton" class="tab-button"
+                                         style="width: 92px; height: 92px; margin-top: 20px;"/>
+            <ui:Button text="Generate" display-tooltip-when-elided="true" name="GenerateButton" class="not-tab"
+                       style="margin-left: 8px; margin-right: 8px; margin-top: 8px; margin-bottom: 8px;"/>
+        </UI.Tabs_View.TabsView>
+        <TabbedView>
+            <TabButton focusable="true" text="453"/>
+        </TabbedView>
+        <ui:Button display-tooltip-when-elided="false" name="HideButton" tabindex="0"
+                   style="width: 48px; height: 48px; margin-left: 0; margin-right: 0; margin-top: 4px; margin-bottom: 0; padding-left: 4px; padding-right: 4px; padding-top: 4px; padding-bottom: 4px; border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; background-color: rgb(255, 23, 23);">
+            <ui:VisualElement name="Icon"
+                              style="background-image: url(&apos;project://database/Assets/Texture/console.png?fileID=2800000&amp;guid=65b9d3fe88b91f44aa7f50149ae4546a&amp;type=3#console&apos;); width: 100%; height: 100%;"/>
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>

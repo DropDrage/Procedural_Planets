@@ -1,11 +1,13 @@
+using System;
 using Noise;
+using Planet.Common;
 using Planet.Common.Generation;
 using Planet.Settings;
 using UnityEngine;
-using Utils;
 
 namespace Planet.Generation
 {
+    [Obsolete("Use async")]
     public class ColorGenerator : BaseColorGenerator
     {
         public void UpdateSettings(ColorSettings settings)
