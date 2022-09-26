@@ -7,10 +7,10 @@
     <DisableHandlePackageFileConflicts>true</DisableHandlePackageFileConflicts>
   </PropertyGroup>
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>10.0.20506</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
+      <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+      <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+      <ProductVersion>10.0.20506</ProductVersion>
+      <SchemaVersion>2.0</SchemaVersion>
       <RootNamespace></RootNamespace>
       <ProjectGuid>{c6027151-54bf-235f-95f5-ae516951de51}</ProjectGuid>
       <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -67,17 +67,17 @@
         <Reference Include="UnityEngine.AssetBundleModule">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.AssetBundleModule.dll</HintPath>
         </Reference>
-     <Reference Include="UnityEngine.AudioModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.AudioModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.ClothModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClothModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.ClusterInputModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterInputModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.ClusterRendererModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterRendererModule.dll</HintPath>
+        <Reference Include="UnityEngine.AudioModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.AudioModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClothModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClothModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClusterInputModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterInputModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.ClusterRendererModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterRendererModule.dll</HintPath>
      </Reference>
      <Reference Include="UnityEngine.CoreModule">
          <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>
@@ -91,15 +91,15 @@
      <Reference Include="UnityEngine.DirectorModule">
          <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.DirectorModule.dll</HintPath>
      </Reference>
-     <Reference Include="UnityEngine.GIModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.GIModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.GameCenterModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.GameCenterModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.GridModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.GridModule.dll</HintPath>
-     </Reference>
+        <Reference Include="UnityEngine.GIModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.GIModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.GameCenterModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.GameCenterModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.GridModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.GridModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.HotReloadModule">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.HotReloadModule.dll</HintPath>
         </Reference>
@@ -144,13 +144,13 @@
         </Reference>
         <Reference Include="UnityEngine.ScreenCaptureModule">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.ScreenCaptureModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.SharedInternalsModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.SharedInternalsModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.SpriteMaskModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.SpriteMaskModule.dll</HintPath>
-     </Reference>
+        </Reference>
+        <Reference Include="UnityEngine.SharedInternalsModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.SharedInternalsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.SpriteMaskModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.SpriteMaskModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.SpriteShapeModule">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.SpriteShapeModule.dll</HintPath>
         </Reference>
@@ -198,16 +198,16 @@
         </Reference>
         <Reference Include="UnityEngine.UmbraModule">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UmbraModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.UnityAnalyticsModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityAnalyticsModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.UnityConnectModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityConnectModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.UnityCurlModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityCurlModule.dll</HintPath>
-     </Reference>
+        </Reference>
+        <Reference Include="UnityEngine.UnityAnalyticsModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityAnalyticsModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityConnectModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityConnectModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityCurlModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityCurlModule.dll</HintPath>
+        </Reference>
      <Reference Include="UnityEngine.UnityTestProtocolModule">
          <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityTestProtocolModule.dll</HintPath>
      </Reference>
@@ -226,15 +226,15 @@
      <Reference Include="UnityEngine.UnityWebRequestWWWModule">
          <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
      </Reference>
-     <Reference Include="UnityEngine.VFXModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.VFXModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.VRModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.VRModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.VehiclesModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.VehiclesModule.dll</HintPath>
-     </Reference>
+        <Reference Include="UnityEngine.VFXModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.VFXModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VRModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.VRModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.VehiclesModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.VehiclesModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.VideoModule">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.VideoModule.dll</HintPath>
         </Reference>
@@ -426,13 +426,13 @@
         </Reference>
         <Reference Include="System.Diagnostics.Debug">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Diagnostics.Debug.dll</HintPath>
-     </Reference>
-     <Reference Include="System.Diagnostics.FileVersionInfo">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Diagnostics.FileVersionInfo.dll</HintPath>
-     </Reference>
-     <Reference Include="System.Diagnostics.Process">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Diagnostics.Process.dll</HintPath>
-     </Reference>
+        </Reference>
+        <Reference Include="System.Diagnostics.FileVersionInfo">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Diagnostics.FileVersionInfo.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Diagnostics.Process">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Diagnostics.Process.dll</HintPath>
+        </Reference>
         <Reference Include="System.Diagnostics.StackTrace">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Diagnostics.StackTrace.dll</HintPath>
         </Reference>
@@ -606,25 +606,25 @@
         </Reference>
         <Reference Include="System.Runtime.Serialization.Xml">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Runtime.Serialization.Xml.dll</HintPath>
-     </Reference>
-     <Reference Include="System.Security.Claims">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Claims.dll</HintPath>
-     </Reference>
-     <Reference Include="System.Security.Cryptography.Algorithms">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Cryptography.Algorithms.dll</HintPath>
-     </Reference>
-     <Reference Include="System.Security.Cryptography.Csp">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Cryptography.Csp.dll</HintPath>
-     </Reference>
-     <Reference Include="System.Security.Cryptography.Encoding">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Cryptography.Encoding.dll</HintPath>
-     </Reference>
-     <Reference Include="System.Security.Cryptography.Primitives">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Cryptography.Primitives.dll</HintPath>
-     </Reference>
-     <Reference Include="System.Security.Cryptography.X509Certificates">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Cryptography.X509Certificates.dll</HintPath>
-     </Reference>
+        </Reference>
+        <Reference Include="System.Security.Claims">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Claims.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Security.Cryptography.Algorithms">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Cryptography.Algorithms.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Security.Cryptography.Csp">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Cryptography.Csp.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Security.Cryptography.Encoding">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Cryptography.Encoding.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Security.Cryptography.Primitives">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Cryptography.Primitives.dll</HintPath>
+        </Reference>
+        <Reference Include="System.Security.Cryptography.X509Certificates">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Cryptography.X509Certificates.dll</HintPath>
+        </Reference>
         <Reference Include="System.Security.Principal">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Security.Principal.dll</HintPath>
         </Reference>

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Noise
 {
@@ -268,13 +269,17 @@ namespace Noise
             }
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double Dot(int[] g, double x, double y, double z, double t) =>
             g[0] * x + g[1] * y + g[2] * z + g[3] * t;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double Dot(int[] g, double x, double y, double z) => g[0] * x + g[1] * y + g[2] * z;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static double Dot(int[] g, double x, double y) => g[0] * x + g[1] * y;
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int FastFloor(double x) => x >= 0 ? (int) x : (int) x - 1;
 
         /// <summary>

@@ -1,0 +1,44 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CalculateTriangles
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWStructuredBuffer<int> _Triangles;
+
+uint _Resolution;
+
+[numthreads(1,1,1)]
+void CalculateTriangles(uint3 id : SV_DispatchThreadID)
+{
+    const uint lineStartIndex = id.y * _Resolution;
+    const uint position = id.x + lineStartIndex;
+
+    /*_Triangles[triangleVertexIndex] = _Triangles[triangleVertexIndex + 3] = position;
+    _Triangles[triangleVertexIndex + 1] = _Triangles[triangleVertexIndex + 5] = position + _Resolution + 1;
+    _Triangles[triangleVertexIndex + 2] = position + _Resolution;
+    _Triangles[triangleVertexIndex + 4] = position + 1;*/
+
+    const uint triangleVertexIndex = (
+        id.x
+        + id.y * _Resolution
+        + id.z * _Resolution * _Resolution) * 6;
+    _Triangles[triangleVertexIndex] = triangleVertexIndex;
+    _Triangles[triangleVertexIndex + 1] = triangleVertexIndex + 1;
+    _Triangles[triangleVertexIndex + 2] = triangleVertexIndex + 2;
+    _Triangles[triangleVertexIndex + 3] = triangleVertexIndex + 3;
+    _Triangles[triangleVertexIndex + 4] = triangleVertexIndex + 4;
+    _Triangles[triangleVertexIndex + 5] = triangleVertexIndex + 5;
+
+    /*
+    const uint triangleVertexIndexStart = (id.y * _Resolution + id.z * _Resolution * _Resolution) * 6;
+
+    for (int i = triangleVertexIndexStart, end = triangleVertexIndexStart + _Resolution * 6; i < end; i += 6)
+    {
+        _Triangles[i] = i;
+        _Triangles[i + 1] = i + 1;
+        _Triangles[i + 2] = i + 2;
+        _Triangles[i + 3] = i + 3;
+        _Triangles[i + 4] = i + 4;
+        _Triangles[i + 5] = i + 5;
+    }*/
+}

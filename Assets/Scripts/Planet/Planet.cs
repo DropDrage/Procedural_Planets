@@ -22,8 +22,8 @@ namespace Planet
 
         public FaceRenderMask faceRenderMask;
 
-        protected SphereCollider sphereCollider;
-        protected TrailRenderer trailRenderer;
+        public SphereCollider sphereCollider;
+        public TrailRenderer trailRenderer;
 
 
         private void Awake()

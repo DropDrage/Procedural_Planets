@@ -1,7 +1,7 @@
 using System;
 using JetBrains.Annotations;
-using Planet.Generation;
-using Planet.Generation_Async;
+using Planet.Generation_Methods.Multithreaded;
+using Planet.Generation_Methods.Singlethreaded;
 using UnityEngine;
 
 namespace Camera_Controls
@@ -21,7 +21,7 @@ namespace Camera_Controls
             {
                 _minScrollDistance = value!.GetComponent<Planet.Planet>().shapeSettings.planetRadius * 2f;
                 if (value.GetComponent<SunAutoGenerator>() != null
-                    || value.GetComponent<SunAutoGeneratorAsync>() != null)
+                    || value.GetComponent<SunAutoGeneratorAsync>() != null) //ToDo use interface?
                 {
                     _minScrollDistance *= 1.5f;
                 }

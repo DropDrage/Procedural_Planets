@@ -1,7 +1,6 @@
 using Noise;
 using Planet.Settings;
 using UnityEngine;
-using Utils;
 using Utils.Extensions;
 
 namespace Planet.Common

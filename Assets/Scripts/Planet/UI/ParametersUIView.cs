@@ -1,5 +1,5 @@
 using System;
-using Planet.Generation_Async.PlanetSystemGenerators;
+using Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators;
 using Planet.UI.Tab;
 using UI.Tabs_View;
 using UnityEngine;

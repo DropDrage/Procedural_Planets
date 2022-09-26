@@ -1,5 +1,5 @@
 using System;
-using Planet.Generation;
+using Planet.Generation_Methods.Singlethreaded;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;

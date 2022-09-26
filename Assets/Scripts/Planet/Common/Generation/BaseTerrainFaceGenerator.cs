@@ -40,7 +40,7 @@ namespace Planet.Common.Generation
 
         protected Vector3 GeneratePointOnUnitSphere(int x, int y)
         {
-            var percent = new Vector2(x, y) / (resolution - 1);
+            var percent = new Vector2(x / (resolution - 1f), y / (resolution - 1f));
             var pointOnUnitCube = localUp + (percent.x - .5f) * 2 * axisA + (percent.y - .5f) * 2 * axisB;
             return pointOnUnitCube.normalized;
         }
