@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics;
 using System.Linq;
 using Planet.Common;
 using Planet.Settings.Generation;
 using UnityEngine;
 using Utils;
+using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 namespace Planet.Generation_Methods.Singlethreaded.PlanetSystemGenerators
@@ -29,6 +31,9 @@ namespace Planet.Generation_Methods.Singlethreaded.PlanetSystemGenerators
 
         public override void Generate(int seed)
         {
+            var stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
+
             Random.InitState(seed);
 
             var planetSystem = SpawnUtils.SpawnPrefab(planetSystemPrefab).GetComponent<PlanetSystem>();
@@ -48,42 +53,24 @@ namespace Planet.Generation_Methods.Singlethreaded.PlanetSystemGenerators
                 return;
             }
 
-            var sun = GenerateSun(systemName, planetSystemTransform, out var sunTransform);
-            var sunPosition = sunTransform.position;
+            var sun = GenerateSun(systemName, planetSystemTransform);
 
-            var orderedBodies = gravityBodies.OrderBy(body => body.radius * body.Mass).ToArray();
-            foreach (var gravityBody in orderedBodies)
-            {
-                var nextOrbit = parameters.orbitDistanceRadius.RandomValue +
-                                sunParametersGenerator.parameters.planetRadiusRange.to;
-                //sqrt(G*(m1 + m2)/ r)
-                var bodyTransform = gravityBody.transform;
-                bodyTransform.parent = planetSystemTransform;
+            var orderedBodies = gravityBodies.OrderBy(body => body.radius * body.Mass);
+            PlaceBodiesOnOrbits(orderedBodies, planetSystemTransform, sun,
+                sunParametersGenerator.parameters.planetRadiusRange.to, systemName);
 
-                var onOrbitPosition = Random.onUnitSphere * nextOrbit;
-                bodyTransform.position = onOrbitPosition;
-                gravityBody.orbitRadius = onOrbitPosition.magnitude;
-                gravityBody.bodyName =
-                    $"{systemName} {alphabetLower[Random.Range(0, alphabetLower.Length)]}"; //ToDo no random?
-
-                var sunDirection = (sunPosition - bodyTransform.position).normalized;
-                var left = Vector3.Cross(sunDirection, sunTransform.up);
-                gravityBody.initialVelocity = left.normalized * (1.05f * Mathf.Sqrt(
-                    Universe.GravitationConstant
-                    * (gravityBody.Mass + sun.Mass)
-                    / gravityBody.orbitRadius));
-            }
-
+            // gravityBodies.Add(sun);
             planetSystem.bodies = gravityBodies.Append(sun).ToArray();
+
+            stopwatch.Stop();
+            Debug.Log($"Generated in {stopwatch.Elapsed}");
         }
 
-        private GravityBody GenerateSun(string systemName, Transform planetSystemTransform,
-            out Transform sunTransform)
+        private GravityBody GenerateSun(string systemName, Transform planetSystemTransform)
         {
             var sun = sunParametersGenerator.Generate();
-            sunTransform = sun.transform;
             sun.bodyName = $"{systemName} Sun";
-            sunTransform.parent = planetSystemTransform;
+            sun.transform.parent = planetSystemTransform;
             SetDefaultTargetForCamera(sun.gameObject);
             return sun;
         }

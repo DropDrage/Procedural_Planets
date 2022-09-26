@@ -18,7 +18,7 @@ namespace Planet.Generation_Methods.Multithreaded
         {
             var decreasedResolution = resolution - 1;
             var vertices = new Vector3[resolution * resolution];
-            var triangles = new int[decreasedResolution * decreasedResolution * 6];
+            var triangles = new int[decreasedResolution * decreasedResolution * TrianglesStep];
             var meshUv = await RunAsyncWithScheduler(() => mesh.uv, main);
             var uv = meshUv.Length == vertices.Length ? meshUv : new Vector2[vertices.Length];
 
@@ -36,7 +36,8 @@ namespace Planet.Generation_Methods.Multithreaded
                         continue;
                     }
 
-                    triangleVertexIndex = SetCell(triangles, i, triangleVertexIndex);
+                    SetCell(triangles, i, triangleVertexIndex);
+                    triangleVertexIndex += 6;
                 }
 
                 GenerateUvAndVertex(decreasedResolution + y * resolution, decreasedResolution, y, vertices, uv);

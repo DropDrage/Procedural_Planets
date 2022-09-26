@@ -9,6 +9,8 @@ namespace Planet.Common
 {
     public abstract class BasePlanetGenerator<T> : MonoBehaviour where T : BasePlanetGenerationParameters
     {
+        protected const int MaxResolution = 256;
+
         protected static readonly int FilterTypesLastIndex =
             Enum.GetValues(typeof(NoiseSettings.FilterType)).LastIndex();
 

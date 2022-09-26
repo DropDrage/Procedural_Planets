@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Planet.Generation_Methods.Singlethreaded
 {
+    /// <summary>
+    /// <inheritdoc />
+    /// </summary>
     [Obsolete("Use async")]
     public class SunAutoGenerator : PlanetAutoGenerator
     {

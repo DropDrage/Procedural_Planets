@@ -1,6 +1,7 @@
 using Planet;
 using UnityEngine;
 using Utils;
+using Utils.Extensions;
 
 public class PlanetSystem : MonoBehaviour
 {
@@ -9,26 +10,24 @@ public class PlanetSystem : MonoBehaviour
 
     private void FixedUpdate()
     {
-        for (var i = 0; i < bodies.Length; i++)
+        foreach (var attractedBody in bodies)
         {
-            var attractedBody = bodies[i];
-
             var attraction = Vector3.zero;
-            for (var otherBodyI = 0; otherBodyI < bodies.Length; otherBodyI++)
+            foreach (var attractorBody in bodies)
             {
-                var attractorBody = bodies[otherBodyI];
                 if (attractorBody != attractedBody) //ToDo swap with first to eliminate this check
                 {
                     var distance = attractorBody.Position - attractedBody.Position;
-                    var sqrDst = distance.sqrMagnitude;
-                    var forceDir = distance.normalized;
+                    var sqrDistance = distance.sqrMagnitude;
+                    var attractionMagnitude = Universe.GravitationConstant
+                        * (attractedBody.Mass * attractorBody.Mass)
+                        / sqrDistance;
+                    var attractionForce = distance.normalized * attractionMagnitude;
 
-                    // ToDo test without struct recreation
-                    attraction += forceDir *
-                        (Universe.GravitationConstant * (attractedBody.Mass * attractorBody.Mass)) / sqrDst;
+                    attraction.Add(ref attractionForce);
                 }
             }
-            attractedBody.AddAttraction(attraction);
+            attractedBody.AddAttraction(ref attraction);
         }
     }
 }

@@ -78,19 +78,19 @@
         </Reference>
         <Reference Include="UnityEngine.ClusterRendererModule">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterRendererModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.CoreModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.CrashReportingModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.CrashReportingModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.DSPGraphModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.DSPGraphModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.DirectorModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.DirectorModule.dll</HintPath>
-     </Reference>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CrashReportingModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.CrashReportingModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.DSPGraphModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.DSPGraphModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.DirectorModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.DirectorModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.GIModule">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.GIModule.dll</HintPath>
         </Reference>
@@ -208,24 +208,24 @@
         <Reference Include="UnityEngine.UnityCurlModule">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityCurlModule.dll</HintPath>
         </Reference>
-     <Reference Include="UnityEngine.UnityTestProtocolModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityTestProtocolModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.UnityWebRequestModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.UnityWebRequestAudioModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.UnityWebRequestTextureModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
-     </Reference>
-     <Reference Include="UnityEngine.UnityWebRequestWWWModule">
-         <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
-     </Reference>
+        <Reference Include="UnityEngine.UnityTestProtocolModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityTestProtocolModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestAssetBundleModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestAssetBundleModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestTextureModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestTextureModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestWWWModule">
+            <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.UnityWebRequestWWWModule.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.VFXModule">
             <HintPath>S:\Unity\2021.3.7f1\Editor\Data\Managed\UnityEngine\UnityEngine.VFXModule.dll</HintPath>
         </Reference>

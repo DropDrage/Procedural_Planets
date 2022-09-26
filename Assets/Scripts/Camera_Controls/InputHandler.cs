@@ -8,11 +8,11 @@ namespace Camera_Controls
     {
         [NonSerialized] public bool isRightClicked;
 
-        public Vector2 mousePosition;
+        public static Vector2 MousePosition => Mouse.current.position.ReadValue(); //ToDo cache?
 
-        public event Action<Vector2> OnMouseMove;
-        public event Action<Vector2> OnLeftClick;
-        public event Action<float> OnVerticalScroll;
+        public event Action<Vector2> MouseMove;
+        public event Action<Vector2> LeftClick;
+        public event Action<float> VerticalScroll;
 
         private InputActions _inputActions;
 
@@ -32,52 +32,45 @@ namespace Camera_Controls
             _inputActions = new InputActions();
 
             var inputActionsUi = _inputActions.UI;
-            inputActionsUi.Point.started += MousePositionChange;
-            inputActionsUi.Click.performed += LeftClick;
-            inputActionsUi.RightClick.started += RightClick;
-            inputActionsUi.RightClick.performed += RightClick;
-            inputActionsUi.RightClick.canceled += RightClick;
-            inputActionsUi.MouseMove.performed += MouseMove;
+            inputActionsUi.Click.performed += OnLeftClick;
+            inputActionsUi.RightClick.started += OnRightClick;
+            inputActionsUi.RightClick.performed += OnRightClick;
+            inputActionsUi.RightClick.canceled += OnRightClick;
+            inputActionsUi.MouseMove.performed += OnMouseMove;
             inputActionsUi.ScrollWheel.performed += OnScrollMouse;
         }
 
-        private void MouseMove(InputAction.CallbackContext context)
+        private void OnMouseMove(InputAction.CallbackContext context)
         {
             var mouseDelta = context.action.ReadValue<Vector2>();
-            OnMouseMove?.Invoke(mouseDelta);
+            MouseMove?.Invoke(mouseDelta);
         }
 
-        private void MousePositionChange(InputAction.CallbackContext context)
+        private void OnLeftClick(InputAction.CallbackContext context)
         {
-            mousePosition = context.action.ReadValue<Vector2>();
+            print(MousePosition);
+            LeftClick?.Invoke(MousePosition);
         }
 
-        private void LeftClick(InputAction.CallbackContext context)
-        {
-            print(mousePosition);
-            OnLeftClick?.Invoke(mousePosition);
-        }
-
-        private void RightClick(InputAction.CallbackContext context)
+        private void OnRightClick(InputAction.CallbackContext context)
         {
             isRightClicked = context.phase != InputActionPhase.Canceled;
         }
 
         private void OnScrollMouse(InputAction.CallbackContext context)
         {
-            OnVerticalScroll?.Invoke(context.action.ReadValue<Vector2>().y);
+            VerticalScroll?.Invoke(context.action.ReadValue<Vector2>().y);
         }
 
 
         private void OnDestroy()
         {
             var inputActionsUi = _inputActions.UI;
-            inputActionsUi.Point.started -= MousePositionChange;
-            inputActionsUi.Click.performed -= LeftClick;
-            inputActionsUi.RightClick.started -= RightClick;
-            inputActionsUi.RightClick.performed -= RightClick;
-            inputActionsUi.RightClick.canceled -= RightClick;
-            inputActionsUi.MouseMove.performed -= MouseMove;
+            inputActionsUi.Click.performed -= OnLeftClick;
+            inputActionsUi.RightClick.started -= OnRightClick;
+            inputActionsUi.RightClick.performed -= OnRightClick;
+            inputActionsUi.RightClick.canceled -= OnRightClick;
+            inputActionsUi.MouseMove.performed -= OnMouseMove;
             inputActionsUi.ScrollWheel.performed -= OnScrollMouse;
         }
     }

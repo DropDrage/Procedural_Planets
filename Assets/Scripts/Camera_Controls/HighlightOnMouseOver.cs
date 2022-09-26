@@ -2,24 +2,34 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Utils.Extensions;
 
 namespace Camera_Controls
 {
-    [RequireComponent(typeof(InputHandler))]
+    [RequireComponent(typeof(InputHandler), typeof(Camera))]
     public class HighlightOnMouseOver : MonoBehaviour
     {
         [SerializeField] private Material highlightMaterial;
 
-        private GameObject? _highlightedTarget;
-        private List<MeshRenderer>? _highlightedMeshRenderers;
+        private InputHandler _inputHandler;
 
+        private GameObject? _highlightedTarget;
         private Camera _camera;
+
+        private List<MeshRenderer>? _highlightedMeshRenderers;
 
         private List<MeshRenderer>? HighlightedMeshRenderers
         {
             set
             {
-                if (_highlightedMeshRenderers?.Count > 0)
+                if (value.IsNotNullOrEmpty())
+                {
+                    foreach (var meshRenderer in value)
+                    {
+                        AddHighlightMaterial(meshRenderer);
+                    }
+                }
+                if (_highlightedMeshRenderers.IsNotNullOrEmpty())
                 {
                     foreach (var highlightedMeshRenderer in _highlightedMeshRenderers)
                     {
@@ -31,16 +41,16 @@ namespace Camera_Controls
             }
         }
 
-        private InputHandler _inputHandler;
+        private Ray ray;
 
 
         private void Awake()
         {
-            _camera = Camera.main!;
+            _camera = GetComponent<Camera>();
             _inputHandler = GetComponent<InputHandler>();
         }
 
-        private void LateUpdate()
+        private void FixedUpdate()
         {
             if (_inputHandler.isRightClicked)
             {
@@ -48,7 +58,7 @@ namespace Camera_Controls
                 return;
             }
 
-            var ray = _camera.ScreenPointToRay(_inputHandler.mousePosition);
+            ray = _camera.ScreenPointToRay(InputHandler.MousePosition);
             if (!Physics.Raycast(ray, out var hit, _camera.farClipPlane))
             {
                 ResetTarget();
@@ -60,15 +70,10 @@ namespace Camera_Controls
             {
                 var meshRenderers = new List<MeshRenderer>(6);
                 target.GetComponentsInChildren(meshRenderers);
-                if (meshRenderers.Count == 0)
+                if (meshRenderers.IsEmpty())
                 {
                     ResetTarget();
                     return;
-                }
-
-                foreach (var meshRenderer in meshRenderers)
-                {
-                    AddHighlightMaterial(meshRenderer);
                 }
 
                 SetTarget(target, meshRenderers);
@@ -91,6 +96,7 @@ namespace Camera_Controls
         {
             var materials = targetRenderer.materials;
             var materialsWithHighlight = new Material[materials.Length + 1];
+
             Array.Copy(materials, 0, materialsWithHighlight, 1, materials.Length);
             materialsWithHighlight[0] = highlightMaterial;
             targetRenderer.materials = materialsWithHighlight;
@@ -110,6 +116,13 @@ namespace Camera_Controls
             }
 
             targetRenderer.materials = materialsWithoutHighlight;
+        }
+
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawRay(ray.origin, ray.origin + ray.direction * 10000);
         }
     }
 }

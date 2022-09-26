@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 namespace Planet.Generation_Methods.Singlethreaded.PlanetSystemGenerators
 {
     [Obsolete("Use async")]
-    public class PlanetParametersGenerator : BaseSyncPlanetGenerator<PlanetGenerationParameters>
+    public class PlanetParametersGenerator : BaseSyncPlanetGenerator<PlanetGenerationParameters, PlanetGenerator>
     {
         protected override ColorSettings.BiomeColorSettings GenerateBiomeSettings()
         {
@@ -21,8 +21,7 @@ namespace Planet.Generation_Methods.Singlethreaded.PlanetSystemGenerators
                     colorKeys[k].time = Random.value;
                 }
 
-                var gradient = new Gradient();
-                gradient.colorKeys = colorKeys;
+                var gradient = new Gradient {colorKeys = colorKeys,};
 
                 biomes[i] = new ColorSettings.BiomeColorSettings.Biome(
                     gradient, Random.ColorHSV(0, 1f, 0.1f, 0.825f),
@@ -43,8 +42,7 @@ namespace Planet.Generation_Methods.Singlethreaded.PlanetSystemGenerators
                 oceanColorKeys[k].time = Random.value;
             }
 
-            var oceanGradient = new Gradient();
-            oceanGradient.colorKeys = oceanColorKeys;
+            var oceanGradient = new Gradient {colorKeys = oceanColorKeys,};
             return oceanGradient;
         }
     }

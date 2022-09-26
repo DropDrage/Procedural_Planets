@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 namespace Planet.Generation_Methods.Singlethreaded.PlanetSystemGenerators
 {
     [Obsolete("Use async")]
-    public class SunParametersGenerator : BaseSyncPlanetGenerator<SunGenerationParameters>
+    public class SunParametersGenerator : BaseSyncPlanetGenerator<SunGenerationParameters, SunGenerator>
     {
         private const float ForwardColorLimit = 55 / 360f;
         private const float BackwardColorLimit = 170 / 360f;
@@ -54,8 +54,7 @@ namespace Planet.Generation_Methods.Singlethreaded.PlanetSystemGenerators
                 }
             }
 
-            var oceanGradient = new Gradient();
-            oceanGradient.colorKeys = oceanColorKeys;
+            var oceanGradient = new Gradient {colorKeys = oceanColorKeys,};
             return oceanGradient;
         }
 

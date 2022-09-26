@@ -62,7 +62,6 @@ namespace Editor
             {
                 var offsetToBody = body.Position - point;
                 var sqrDst = offsetToBody.sqrMagnitude;
-                var distance = Mathf.Sqrt(sqrDst);
                 var dirToBody = offsetToBody / Mathf.Sqrt(sqrDst);
                 var acceleration = Universe.GravitationConstant * body.Mass / sqrDst;
                 totalAcc += dirToBody * acceleration;

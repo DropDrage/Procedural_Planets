@@ -1,9 +1,11 @@
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Planet.Common;
 using Planet.Settings.Generation;
 using UnityEngine;
 using Utils;
+using Debug = UnityEngine.Debug;
 
 namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
 {
@@ -25,8 +27,10 @@ namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
 
         public override async void Generate(int seed)
         {
+            var stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
+
             Time.timeScale = 0;
-            Debug.Log("Generation start");
             Random.InitState(seed);
 
             var planetSystem = SpawnUtils.SpawnPrefab(planetSystemPrefab).GetComponent<PlanetSystem>();
@@ -42,39 +46,23 @@ namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
 
             var sun = await GenerateSun(seed, systemName, planetSystemTransform, mainTaskScheduler);
             sun.enabled = true;
-            var sunTransform = sun.transform;
-            var sunPosition = sunTransform.position;
 
             await Task.WhenAll(gravityBodyTasks);
             var orderedBodies = gravityBodyTasks.Select(bodyTask => bodyTask.Result)
                 .OrderBy(body => body.radius * body.Mass)
-                .ToArray();
+                .ToList();
 
-            foreach (var gravityBody in orderedBodies)
-            {
-                var nextOrbit = parameters.orbitDistanceRadius.RandomValue +
-                                sunParametersGenerator.parameters.planetRadiusRange.to;
-                var bodyTransform = gravityBody.transform;
-                bodyTransform.parent = planetSystemTransform;
-
-                var onOrbitPosition = Random.onUnitSphere * nextOrbit;
-                bodyTransform.position = onOrbitPosition;
-                gravityBody.orbitRadius = onOrbitPosition.magnitude;
-                gravityBody.bodyName = $"{systemName} {alphabetLower[Random.Range(0, alphabetLower.Length)]}";
-
-                var sunDirection = (sunPosition - bodyTransform.position).normalized;
-                var left = Vector3.Cross(sunDirection, sunTransform.up);
-                //sqrt(G*(m1 + m2)/ r)
-                gravityBody.initialVelocity = left.normalized * (1.05f * Mathf.Sqrt(
-                    Universe.GravitationConstant * (gravityBody.Mass + sun.Mass) / gravityBody.orbitRadius));
-                gravityBody.enabled = true;
-            }
+            PlaceBodiesOnOrbits(orderedBodies, planetSystemTransform, sun,
+                sunParametersGenerator.parameters.planetRadiusRange.to, systemName);
 
             planetSystem.enabled = true;
-            planetSystem.bodies = orderedBodies.Append(sun).ToArray();
+            orderedBodies.Add(sun);
+            planetSystem.bodies = orderedBodies.ToArray();
 
-            Debug.Log("Generation end");
             Time.timeScale = 1;
+
+            stopwatch.Stop();
+            Debug.Log($"Generated in {stopwatch.Elapsed}");
         }
 
         private async Task<GravityBody> GenerateSun(int sunSeed, string systemName, Transform planetSystemTransform,

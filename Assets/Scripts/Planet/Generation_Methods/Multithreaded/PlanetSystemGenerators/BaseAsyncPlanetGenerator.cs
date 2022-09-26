@@ -10,21 +10,23 @@ using Random = System.Random;
 
 namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
 {
-    public abstract class BaseAsyncPlanetGenerator<T> : BasePlanetGenerator<T> where T : BasePlanetGenerationParameters
+    public abstract class BaseAsyncPlanetGenerator<T, TGenerator> : BasePlanetGenerator<T>
+        where T : BasePlanetGenerationParameters
+        where TGenerator : PlanetGeneratorAsync, new()
     {
         public async Task<GravityBody> Generate(int seed, TaskScheduler mainScheduler)
         {
             GameObject planetObject = null;
-            PlanetAutoGeneratorAsync planetAutoGenerator = null;
+            Planet planet = null;
             GravityBody gravityBody = null;
+
+            var planetGenerator = new TGenerator();
 
             await RunAsyncWithScheduler(() =>
             {
                 planetObject = SpawnUtils.SpawnPrefab(prefab);
-                planetAutoGenerator = planetObject.GetComponent<PlanetAutoGeneratorAsync>();
-                planetAutoGenerator.generateOnStart = false;
-
-                gravityBody = planetAutoGenerator.GetComponent<GravityBody>();
+                planet = planetObject.GetComponent<Planet>();
+                gravityBody = planetObject.GetComponent<GravityBody>();
             }, mainScheduler);
 
             var mainRandom = new Random(seed);
@@ -32,21 +34,20 @@ namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
 
             var shapeTask = Task.Run(async () =>
             {
-                await GenerateShape(planetAutoGenerator, mainRandom, mainScheduler);
-                await RunAsyncWithScheduler(() => CalculateGravity(planetAutoGenerator, mainRandom), mainScheduler);
+                await GenerateShape(planet, planetGenerator, mainRandom, mainScheduler);
+                await RunAsyncWithScheduler(() => CalculateGravity(planet, mainRandom), mainScheduler);
             });
-            var colorTask = GenerateColor(planetAutoGenerator, colorRandom, mainScheduler);
+            var colorTask = GenerateColor(planet, colorRandom, mainScheduler);
 
             Task.WaitAll(shapeTask, colorTask);
             await RunAsyncWithScheduler(() => CustomGeneration(planetObject, mainRandom), mainScheduler);
 
-            Debug.Log("Parameters Done");
-            await planetAutoGenerator.GeneratePlanet(mainScheduler);
-            Debug.Log("Planet generated");
+            await planetGenerator.GeneratePlanet(planet, mainScheduler);
             return gravityBody;
         }
 
-        private async Task GenerateShape(PlanetAutoGeneratorAsync planet, Random random, TaskScheduler main)
+        private async Task GenerateShape(Planet planet, PlanetGeneratorAsync planetGenerator, Random random,
+            TaskScheduler main)
         {
             var noiseLayers = new ShapeSettings.NoiseLayer[parameters.noiseLayersRange.GetRandomValue(random)];
             for (int i = 0, noiseSettingsLength = noiseLayers.Length + 1; i < noiseLayers.Length; i++)
@@ -61,7 +62,8 @@ namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
                 await RunAsyncWithScheduler(ScriptableObject.CreateInstance<ShapeSettings>, main);
             shapeSettings.planetRadius = parameters.planetRadiusRange.GetRandomValue(random);
             shapeSettings.noiseLayers = noiseLayers;
-            planet.resolution = (int) (shapeSettings.planetRadius / parameters.planetRadiusRange.to * 256);
+            planetGenerator.resolution =
+                (int) (shapeSettings.planetRadius / parameters.planetRadiusRange.to * MaxResolution);
         }
 
         private NoiseSettings GenerateNoiseSettings(int i, int length, Random random)
@@ -102,8 +104,8 @@ namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
         {
             var planetRigidbody = planet.GetComponent<Rigidbody>();
             planetRigidbody.mass = planet.shapeSettings.planetRadius
-                                   * planet.shapeSettings.planetRadius
-                                   * parameters.massMultiplierRange.GetRandomValue(random);
+                * planet.shapeSettings.planetRadius
+                * parameters.massMultiplierRange.GetRandomValue(random);
             planetRigidbody.AddTorque(random.OnUnitSphere() * parameters.angularVelocityRange.GetRandomValue(random),
                 ForceMode.VelocityChange);
         }

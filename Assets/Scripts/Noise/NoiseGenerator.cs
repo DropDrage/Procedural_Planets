@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace Noise
 {
@@ -25,9 +26,10 @@ namespace Noise
         };
 
         private const int RandomSize = 256;
+        private const int Grad3Size = 12;
+
         private const double Sqrt3 = 1.7320508075688772935;
         private const double Sqrt5 = 2.2360679774997896964;
-        private int[] _random;
 
         /// Skewing and unskewing factors for 2D, 3D and 4D, 
         /// some of them pre-multiplied.
@@ -57,6 +59,8 @@ namespace Noise
             new[] {0, -1, 1}, new[] {0, 1, -1}, new[] {0, -1, -1}
         };
 
+        private int[] _random;
+
         #endregion
 
 
@@ -74,7 +78,7 @@ namespace Noise
         /// <summary>
         /// Generates value, typically in range [-1, 1]
         /// </summary>
-        public float Evaluate(UnityEngine.Vector3 point)
+        public float Evaluate(Vector3 point)
         {
             double x = point.x;
             double y = point.y;
@@ -204,7 +208,7 @@ namespace Noise
             if (t0 > 0)
             {
                 t0 *= t0;
-                var gi0 = _random[ii + _random[jj + _random[kk]]] % 12;
+                var gi0 = _random[ii + _random[jj + _random[kk]]] % Grad3Size;
                 n0 = t0 * t0 * Dot(Grad3[gi0], x0, y0, z0);
             }
 
@@ -212,7 +216,7 @@ namespace Noise
             if (t1 > 0)
             {
                 t1 *= t1;
-                var gi1 = _random[ii + i1 + _random[jj + j1 + _random[kk + k1]]] % 12;
+                var gi1 = _random[ii + i1 + _random[jj + j1 + _random[kk + k1]]] % Grad3Size;
                 n1 = t1 * t1 * Dot(Grad3[gi1], x1, y1, z1);
             }
 
@@ -220,7 +224,7 @@ namespace Noise
             if (t2 > 0)
             {
                 t2 *= t2;
-                var gi2 = _random[ii + i2 + _random[jj + j2 + _random[kk + k2]]] % 12;
+                var gi2 = _random[ii + i2 + _random[jj + j2 + _random[kk + k2]]] % Grad3Size;
                 n2 = t2 * t2 * Dot(Grad3[gi2], x2, y2, z2);
             }
 
@@ -228,7 +232,7 @@ namespace Noise
             if (t3 > 0)
             {
                 t3 *= t3;
-                var gi3 = _random[ii + 1 + _random[jj + 1 + _random[kk + 1]]] % 12;
+                var gi3 = _random[ii + 1 + _random[jj + 1 + _random[kk + 1]]] % Grad3Size;
                 n3 = t3 * t3 * Dot(Grad3[gi3], x3, y3, z3);
             }
 
@@ -252,20 +256,13 @@ namespace Noise
 
                 for (var i = 0; i < Source.Length; i++)
                 {
-                    _random[i] = Source[i] ^ F[0];
-                    _random[i] ^= F[1];
-                    _random[i] ^= F[2];
-                    _random[i] ^= F[3];
-
-                    _random[i + RandomSize] = _random[i];
+                    _random[i] = _random[i + RandomSize] = Source[i] ^ F[0] ^ F[1] ^ F[2] ^ F[3];
                 }
             }
             else
             {
-                for (var i = 0; i < RandomSize; i++)
-                {
-                    _random[i + RandomSize] = _random[i] = Source[i];
-                }
+                Array.Copy(Source, _random, RandomSize);
+                Array.Copy(Source, 0, _random, RandomSize, RandomSize);
             }
         }
 
@@ -284,20 +281,18 @@ namespace Noise
 
         /// <summary>
         /// Unpack the given integer (int32) to an array of 4 bytes  in little endian format.
-        /// If the length of the buffer is too smal, it wil be resized.
+        /// If the length of the buffer is too small, it wil be resized.
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="buffer">The output buffer.</param>
-        private static byte[] UnpackLittleUint32(int value, ref byte[] buffer)
+        private static void UnpackLittleUint32(int value, ref byte[] buffer)
         {
             if (buffer.Length < 4) Array.Resize(ref buffer, 4);
 
             buffer[0] = (byte) (value & 0x00ff);
             buffer[1] = (byte) ((value & 0xff00) >> 8);
             buffer[2] = (byte) ((value & 0x00ff0000) >> 16);
-            buffer[3] = (byte) ((value & 0xff000000) >> 24);
-
-            return buffer;
+            buffer[3] = (byte) (value >> 24);
         }
     }
 }

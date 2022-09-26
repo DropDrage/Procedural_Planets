@@ -5,7 +5,8 @@ using Utils;
 
 namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
 {
-    public class PlanetParametersGeneratorAsync : BaseAsyncPlanetGenerator<PlanetGenerationParameters>
+    public class PlanetParametersGeneratorAsync
+        : BaseAsyncPlanetGenerator<PlanetGenerationParameters, PlanetGeneratorAsync>
     {
         protected override ColorSettings.BiomeColorSettings GenerateBiomeSettingsAsync(System.Random random)
         {

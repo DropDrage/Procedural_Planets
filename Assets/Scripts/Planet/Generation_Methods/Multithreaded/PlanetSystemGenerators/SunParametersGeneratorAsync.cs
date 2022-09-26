@@ -6,7 +6,7 @@ using Utils;
 
 namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
 {
-    public class SunParametersGeneratorAsync : BaseAsyncPlanetGenerator<SunGenerationParameters>
+    public class SunParametersGeneratorAsync : BaseAsyncPlanetGenerator<SunGenerationParameters, SunGeneratorAsync>
     {
         private const float ForwardColorLimit = 55 / 360f;
         private const float BackwardColorLimit = 170 / 360f;

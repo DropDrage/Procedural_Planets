@@ -20,6 +20,7 @@ namespace Planet
         public ShapeSettings shapeSettings;
         public ColorSettings colorSettings;
 
+        [Tooltip("Used only in Autogens")]
         public FaceRenderMask faceRenderMask;
 
         public SphereCollider sphereCollider;

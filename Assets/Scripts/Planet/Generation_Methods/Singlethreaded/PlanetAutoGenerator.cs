@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Planet.Generation_Methods.Singlethreaded
 {
+    /// <summary>
+    /// Use only for tests
+    /// </summary>
     [Obsolete("Use async")]
     public class PlanetAutoGenerator : Planet
     {

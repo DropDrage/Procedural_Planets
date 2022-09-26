@@ -34,13 +34,18 @@ namespace Planet
 
         private void OnEnable()
         {
+            Initialize();
+        }
+
+        public void Initialize()
+        {
             radius = GetComponent<Planet>().shapeSettings.planetRadius;
             gameObject.name = bodyName;
             _rb.AddForce(initialVelocity, ForceMode.VelocityChange);
             _transform = transform;
         }
 
-        public void AddAttraction(Vector3 attraction)
+        public void AddAttraction(ref Vector3 attraction)
         {
             _rb.AddForce(attraction);
         }

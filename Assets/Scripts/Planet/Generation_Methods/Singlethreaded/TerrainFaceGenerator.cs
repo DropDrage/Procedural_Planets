@@ -40,7 +40,8 @@ namespace Planet.Generation_Methods.Singlethreaded
                         continue;
                     }
 
-                    triangleVertexIndex = SetCell(triangles, i, triangleVertexIndex);
+                    SetCell(triangles, i, triangleVertexIndex);
+                    triangleVertexIndex += TrianglesStep;
                 }
 
                 GenerateUvAndVertex(decreasedResolution + y * resolution, decreasedResolution, y, vertices, uv);
