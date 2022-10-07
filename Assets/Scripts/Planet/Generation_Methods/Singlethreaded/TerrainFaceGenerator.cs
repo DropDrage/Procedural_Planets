@@ -19,25 +19,7 @@ namespace Planet.Generation_Methods.Singlethreaded
         {
             Profiler.BeginSample("ConstructMesh");
 
-            var decreasedResolution = resolution - 1;
-            var vertices = new Vector3[resolution * resolution];
-            var uv = mesh.uv.Length == vertices.Length ? mesh.uv : new Vector2[vertices.Length];
-
-            Profiler.BeginSample("ConstructMesh_Loop");
-
-            for (var y = 0; y < resolution; y++)
-            {
-                var yResolution = y * resolution;
-                for (var x = 0; x < decreasedResolution; x++)
-                {
-                    var i = x + yResolution;
-                    GenerateUvAndVertex(i, x, y, vertices, uv);
-                }
-
-                GenerateUvAndVertex(decreasedResolution + y * resolution, decreasedResolution, y, vertices, uv);
-            }
-
-            Profiler.EndSample();
+            var (vertices, uv) = GenerateUvsAndVertices(mesh.uv);
 
             mesh.Clear();
             mesh.vertices = vertices;

@@ -10,7 +10,8 @@ namespace Planet.Generation_Methods.GPU
         {
         }
 
-        protected override Vector3 CalculateVertex(ref Vector3 pointOnUnitSphere, float unscaledElevation) =>
+
+        protected override Vector3 CalculateVertex(Vector3 pointOnUnitSphere, float unscaledElevation) =>
             pointOnUnitSphere * shapeGenerator.GetScaledElevation(1);
     }
 }

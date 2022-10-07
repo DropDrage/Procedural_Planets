@@ -16,22 +16,7 @@ namespace Planet.Generation_Methods.Multithreaded
 
         public async Task ConstructMesh(int[] triangles, TaskScheduler main)
         {
-            var decreasedResolution = resolution - 1;
-            var vertices = new Vector3[resolution * resolution];
-            var meshUv = await RunAsyncWithScheduler(() => mesh.uv, main);
-            var uv = meshUv.Length == vertices.Length ? meshUv : new Vector2[vertices.Length];
-
-            for (var y = 0; y < resolution; y++)
-            {
-                var yResolution = y * resolution;
-                for (var x = 0; x < decreasedResolution; x++)
-                {
-                    var i = x + yResolution;
-                    GenerateUvAndVertex(i, x, y, vertices, uv);
-                }
-
-                GenerateUvAndVertex(decreasedResolution + y * resolution, decreasedResolution, y, vertices, uv);
-            }
+            var (vertices, uv) = GenerateUvsAndVertices(await RunAsyncWithScheduler(() => mesh.uv, main));
 
             await RunAsyncWithScheduler(() =>
             {

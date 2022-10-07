@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 namespace Planet.Common.Generation
 {
     public abstract class BaseTerrainFaceGenerator
     {
-        protected const int TrianglesStep = 6;
+        private const int TrianglesStep = 6;
 
         protected readonly ShapeGenerator shapeGenerator;
 
@@ -30,15 +31,6 @@ namespace Planet.Common.Generation
         }
 
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected void SetCell(IList<int> triangles, int position, int triangleVertexIndex)
-        {
-            triangles[triangleVertexIndex] = triangles[triangleVertexIndex + 3] = position;
-            triangles[triangleVertexIndex + 1] = triangles[triangleVertexIndex + 5] = position + resolution + 1;
-            triangles[triangleVertexIndex + 2] = position + resolution;
-            triangles[triangleVertexIndex + 4] = position + 1;
-        }
-
         protected Vector3 GeneratePointOnUnitSphere(int x, int y)
         {
             var percent = new Vector2(x / (resolution - 1f), y / (resolution - 1f));
@@ -46,7 +38,31 @@ namespace Planet.Common.Generation
             return pointOnUnitCube.normalized;
         }
 
-        protected void GenerateUvAndVertex(int i, int x, int y, IList<Vector3> vertices, Vector2[] uv)
+
+        protected (Vector3[] vertices, Vector2[] uv) GenerateUvsAndVertices(Vector2[] meshUv)
+        {
+            Profiler.BeginSample(nameof(GenerateUvsAndVertices));
+
+            var vertices = new Vector3[resolution * resolution];
+            var uv = meshUv.Length == vertices.Length ? meshUv : new Vector2[vertices.Length];
+
+            for (var y = 0; y < resolution; y++)
+            {
+                var yResolution = y * resolution;
+                for (var x = 0; x < resolution; x++)
+                {
+                    var i = x + yResolution;
+                    GenerateUvAndVertex(i, x, y, vertices, uv);
+                }
+            }
+
+            Profiler.EndSample();
+
+            return (vertices, uv);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void GenerateUvAndVertex(int i, int x, int y, IList<Vector3> vertices, Vector2[] uv)
         {
             var pointOnUnitSphere = GeneratePointOnUnitSphere(x, y);
             var unscaledElevation = shapeGenerator.CalculateUnscaledElevation(pointOnUnitSphere);
