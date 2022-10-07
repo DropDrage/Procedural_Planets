@@ -12,12 +12,11 @@ namespace Planet.Generation_Methods.Singlethreaded
     {
         public void UpdateSettings(ColorSettings settings)
         {
-            base.settings = settings;
+            this.settings = settings;
 
             if (texture == null || texture.height != settings.biomeColorSettings.biomes.Length)
             {
-                texture = new Texture2D(DoubledTextureResolution, settings.biomeColorSettings.biomes.Length,
-                    TextureFormat.RGBA32, false);
+                texture = new Texture2D(TextureWidth, TextureHeight, TextureFormat.RGBA32, false);
             }
 
             biomeNoiseFilter = NoiseFilterFactory.CreateNoiseFilter(settings.biomeColorSettings.noise);
@@ -31,9 +30,8 @@ namespace Planet.Generation_Methods.Singlethreaded
         public float BiomePercentFromPoint(Vector3 pointOnUnitSphere)
         {
             var heightPercent = (pointOnUnitSphere.y + 1) / 2f
-                                + (biomeNoiseFilter.Evaluate(pointOnUnitSphere) -
-                                   settings.biomeColorSettings.noiseOffset)
-                                * settings.biomeColorSettings.noiseStrength;
+                + (biomeNoiseFilter.Evaluate(pointOnUnitSphere) - settings.biomeColorSettings.noiseOffset)
+                * settings.biomeColorSettings.noiseStrength;
             var biomeIndex = 0f;
             var biomesCount = settings.biomeColorSettings.biomes.Length;
             var blendRange = settings.biomeColorSettings.blendAmount / 2f + .001f;
@@ -50,21 +48,26 @@ namespace Planet.Generation_Methods.Singlethreaded
 
         public void UpdateColors()
         {
-            var colors = new Color[texture.width * texture.height];
-            for (var biomeIndex = 0; biomeIndex < settings.biomeColorSettings.biomes.Length; biomeIndex++)
+            var colors = new Color[TextureSize];
+            for (int biomeIndex = 0, biomesCount = settings.biomeColorSettings.biomes.Length;
+                 biomeIndex < biomesCount;
+                 biomeIndex++)
             {
                 var biome = settings.biomeColorSettings.biomes[biomeIndex];
-                var colorIndex = biomeIndex * DoubledTextureResolution;
-                for (var i = 0; i < TextureResolution; i++)
-                {
-                    var gradientColor = settings.oceanGradient.Evaluate(i / TextureResolutionMinusOne);
-                    colors[colorIndex++] = GenerateColorFromGradient(gradientColor, biome.tint, biome.tintPercent);
-                }
+                var biomeTint = biome.tint;
+                var biomeTintPercent = biome.tintPercent;
 
-                for (int i = TextureResolution; i < DoubledTextureResolution; i++)
+                for (int i = 0, colorIndex = biomeIndex * DoubledTextureResolution;
+                     i < TextureResolution;
+                     i++, colorIndex++)
                 {
-                    var gradientColor = biome.gradient.Evaluate((i - TextureResolution) / TextureResolutionMinusOne);
-                    colors[colorIndex++] = GenerateColorFromGradient(gradientColor, biome.tint, biome.tintPercent);
+                    var time = i / TextureResolutionMinusOne;
+                    var oceanGradientColor = settings.oceanGradient.Evaluate(time);
+                    colors[colorIndex] = GenerateColorFromGradient(oceanGradientColor, biomeTint, biomeTintPercent);
+
+                    var biomeGradientColor = biome.gradient.Evaluate(time);
+                    colors[colorIndex + TextureResolution] =
+                        GenerateColorFromGradient(biomeGradientColor, biomeTint, biomeTintPercent);
                 }
             }
 

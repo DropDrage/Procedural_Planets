@@ -13,6 +13,10 @@ namespace Planet.Common.Generation
         protected const int DoubledTextureResolution = TextureResolution * 2;
         protected const float TextureResolutionMinusOne = TextureResolution - 1f;
 
+        protected static int TextureWidth => DoubledTextureResolution;
+        protected int TextureHeight => settings.biomeColorSettings.biomes.Length;
+        protected int TextureSize => TextureWidth * TextureHeight;
+
         protected ColorSettings settings;
         protected Texture2D texture;
         protected INoiseFilter biomeNoiseFilter;
