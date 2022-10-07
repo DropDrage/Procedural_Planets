@@ -10,8 +10,6 @@ namespace Planet
         /// </summary>
         public float radius;
 
-        public float orbitRadius;
-
         // public float surfaceGravity;
         public Vector3 initialVelocity;
         public string bodyName = "Unnamed";
@@ -43,6 +41,12 @@ namespace Planet
             gameObject.name = bodyName;
             _rb.AddForce(initialVelocity, ForceMode.VelocityChange);
             _transform = transform;
+        }
+
+
+        public void AddAttraction(Vector3 attraction)
+        {
+            _rb.AddForce(attraction);
         }
 
         public void AddAttraction(ref Vector3 attraction)

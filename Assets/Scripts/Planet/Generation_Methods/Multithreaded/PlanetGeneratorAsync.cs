@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Planet.Common;
+using Planet.Common.Generation;
 using UnityEngine;
 using static Utils.AsyncUtils;
 
@@ -76,10 +76,11 @@ namespace Planet.Generation_Methods.Multithreaded
 
         private async Task GenerateMesh(Planet planet, TaskScheduler main)
         {
+            var triangles = BaseTerrainFaceGenerator.GetTriangles(resolution);
             var constructMeshTasks = new Task[_terrainFaces.Length];
             for (var i = 0; i < _terrainFaces.Length; i++)
             {
-                constructMeshTasks[i] = _terrainFaces[i].ConstructMesh(main);
+                constructMeshTasks[i] = _terrainFaces[i].ConstructMesh(triangles, main);
             }
             Task.WaitAll(constructMeshTasks);
 
@@ -104,12 +105,12 @@ namespace Planet.Generation_Methods.Multithreaded
         {
             await _colorGenerator.UpdateColors(main);
 
-            var uvUpdateTasks = new List<Task>(_terrainFaces.Length);
+            var uvUpdateTasks = new Task[_terrainFaces.Length];
             for (var i = 0; i < _terrainFaces.Length; i++)
             {
-                uvUpdateTasks.Add(_terrainFaces[i].UpdateUVs(_colorGenerator, main));
+                uvUpdateTasks[i] = _terrainFaces[i].UpdateUVs(_colorGenerator, main);
             }
-            Task.WaitAll(uvUpdateTasks.ToArray());
+            Task.WaitAll(uvUpdateTasks);
 
             await RunAsyncWithScheduler(
                 () => planet.trailRenderer.colorGradient = planet.colorSettings.oceanGradient,

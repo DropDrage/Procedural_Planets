@@ -1,5 +1,6 @@
 using System;
 using Planet.Common;
+using Planet.Common.Generation;
 using UnityEngine;
 
 namespace Planet.Generation_Methods.Singlethreaded
@@ -111,11 +112,12 @@ namespace Planet.Generation_Methods.Singlethreaded
 
         private void GenerateMesh()
         {
+            var triangles = BaseTerrainFaceGenerator.GetTriangles(resolution);
             for (var i = 0; i < _terrainFaces.Length; i++)
             {
                 if (meshFilters[i].gameObject.activeSelf)
                 {
-                    _terrainFaces[i].ConstructMesh();
+                    _terrainFaces[i].ConstructMesh(triangles);
                 }
             }
 

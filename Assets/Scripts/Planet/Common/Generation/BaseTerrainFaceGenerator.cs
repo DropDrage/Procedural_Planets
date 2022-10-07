@@ -57,5 +57,34 @@ namespace Planet.Common.Generation
 
         protected virtual Vector3 CalculateVertex(Vector3 pointOnUnitSphere, float unscaledElevation) =>
             pointOnUnitSphere * shapeGenerator.GetScaledElevation(unscaledElevation);
+
+
+        public static int[] GetTriangles(int resolution)
+        {
+            var decreasedResolution = resolution - 1;
+
+            var triangleVertexIndex = 0;
+            var triangles = new int[decreasedResolution * decreasedResolution * TrianglesStep];
+
+            for (int i = 0, positionEnd = decreasedResolution * resolution; i < positionEnd; i++)
+            {
+                if (i % resolution != decreasedResolution)
+                {
+                    SetCell(triangles, i, triangleVertexIndex, resolution);
+                    triangleVertexIndex += TrianglesStep;
+                }
+            }
+
+            return triangles;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void SetCell(IList<int> triangles, int position, int triangleVertexIndex, int resolution)
+        {
+            triangles[triangleVertexIndex] = triangles[triangleVertexIndex + 3] = position;
+            triangles[triangleVertexIndex + 1] = triangles[triangleVertexIndex + 5] = position + resolution + 1;
+            triangles[triangleVertexIndex + 2] = position + resolution;
+            triangles[triangleVertexIndex + 4] = position + 1;
+        }
     }
 }

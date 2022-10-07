@@ -62,22 +62,23 @@ namespace Planet.Common
             foreach (var gravityBody in orderedBodies)
             {
                 var nextOrbit = parameters.orbitDistanceRadius.RandomValue + maxSunRadius;
-                //sqrt(G*(m1 + m2)/ r)
                 var bodyTransform = gravityBody.transform;
-                bodyTransform.parent = planetSystemTransform;
+                bodyTransform.SetParent(planetSystemTransform);
 
                 var onOrbitPosition = Random.onUnitSphere * nextOrbit;
                 bodyTransform.position = onOrbitPosition;
-                gravityBody.orbitRadius = onOrbitPosition.magnitude;
+                var orbitRadius = onOrbitPosition.magnitude;
                 //ToDo no random?
                 gravityBody.bodyName = $"{systemName} {alphabetLower[Random.Range(0, alphabetLower.Length)]}";
 
-                var sunDirection = (sunPosition - bodyTransform.position).normalized;
-                var left = Vector3.Cross(sunDirection, sunTransform.up);
-                gravityBody.initialVelocity = left.normalized * (1.05f * Mathf.Sqrt(
-                    Universe.GravitationConstant
-                    * (gravityBody.Mass + sun.Mass)
-                    / gravityBody.orbitRadius));
+                var directionToSun = sunPosition - bodyTransform.position;
+                var left = Vector3.Cross(directionToSun, sunTransform.up);
+                //sqrt(G*(m1 + m2)/ r)
+                gravityBody.initialVelocity = left.normalized * (1.05f
+                        * Mathf.Sqrt(
+                            Universe.GravitationConstant * (gravityBody.Mass + sun.Mass)
+                            / orbitRadius)
+                    );
 
                 gravityBody.Initialize();
             }

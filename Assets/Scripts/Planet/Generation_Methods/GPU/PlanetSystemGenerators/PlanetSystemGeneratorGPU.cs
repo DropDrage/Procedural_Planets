@@ -1,4 +1,5 @@
 using System.Linq;
+using Planet_System;
 using Planet.Common;
 using Planet.Settings.Generation;
 using UnityEngine;
@@ -28,7 +29,7 @@ namespace Planet.Generation_Methods.GPU.PlanetSystemGenerators
             Debug.Log("Generation start");
             Random.InitState(seed);
 
-            var planetSystem = SpawnUtils.SpawnPrefab(planetSystemPrefab).GetComponent<PlanetSystem>();
+            var planetSystem = SpawnUtils.SpawnPrefab(planetSystemPrefab).GetComponent<BasePlanetSystem>();
             planetSystem.enabled = false;
             var systemName = GenerateSystemName(planetSystem.gameObject);
             var planetSystemTransform = planetSystem.transform;
@@ -51,25 +52,29 @@ namespace Planet.Generation_Methods.GPU.PlanetSystemGenerators
             foreach (var gravityBody in orderedBodies)
             {
                 var nextOrbit = parameters.orbitDistanceRadius.RandomValue +
-                                sunParametersGenerator.parameters.planetRadiusRange.to;
+                    sunParametersGenerator.parameters.planetRadiusRange.to;
                 var bodyTransform = gravityBody.transform;
                 bodyTransform.parent = planetSystemTransform;
 
                 var onOrbitPosition = Random.onUnitSphere * nextOrbit;
                 bodyTransform.position = onOrbitPosition;
-                gravityBody.orbitRadius = onOrbitPosition.magnitude;
+                var orbitRadius = onOrbitPosition.magnitude;
                 gravityBody.bodyName = $"{systemName} {alphabetLower[Random.Range(0, alphabetLower.Length)]}";
 
                 var sunDirection = (sunPosition - bodyTransform.position).normalized;
                 var left = Vector3.Cross(sunDirection, sunTransform.up);
                 //sqrt(G*(m1 + m2)/ r)
-                gravityBody.initialVelocity = left.normalized * (1.05f * Mathf.Sqrt(
-                    Universe.GravitationConstant * (gravityBody.Mass + sun.Mass) / gravityBody.orbitRadius));
+                gravityBody.initialVelocity = left.normalized * (1.05f
+                        * Mathf.Sqrt(
+                            Universe.GravitationConstant * (gravityBody.Mass + sun.Mass)
+                            / orbitRadius)
+                    );
+
                 gravityBody.enabled = true;
             }
 
+            planetSystem.Bodies = orderedBodies.Append(sun).ToArray();
             planetSystem.enabled = true;
-            planetSystem.bodies = orderedBodies.Append(sun).ToArray();
 
             Debug.Log("Generation end");
             Time.timeScale = 1;

@@ -1,5 +1,6 @@
 using System;
 using Planet.Common;
+using Planet.Common.Generation;
 using UnityEngine;
 
 namespace Planet.Generation_Methods.Singlethreaded
@@ -64,9 +65,10 @@ namespace Planet.Generation_Methods.Singlethreaded
 
         private void GenerateMesh(Planet planet)
         {
-            for (var i = 0; i < _terrainFaces.Length; i++)
+            var triangles = BaseTerrainFaceGenerator.GetTriangles(resolution);
+            foreach (var terrainFace in _terrainFaces)
             {
-                _terrainFaces[i].ConstructMesh();
+                terrainFace.ConstructMesh(triangles);
             }
 
             _colorGenerator.UpdateElevation(shapeGenerator.elevationMinMax);
@@ -81,9 +83,9 @@ namespace Planet.Generation_Methods.Singlethreaded
         private void GenerateColours(Planet planet)
         {
             _colorGenerator.UpdateColors();
-            for (var i = 0; i < _terrainFaces.Length; i++)
+            foreach (var terrainFace in _terrainFaces)
             {
-                _terrainFaces[i].UpdateUVs(_colorGenerator);
+                terrainFace.UpdateUVs(_colorGenerator);
             }
 
             planet.trailRenderer.colorGradient = planet.colorSettings.oceanGradient;

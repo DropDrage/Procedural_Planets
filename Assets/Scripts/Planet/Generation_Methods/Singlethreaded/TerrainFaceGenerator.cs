@@ -15,18 +15,16 @@ namespace Planet.Generation_Methods.Singlethreaded
         }
 
 
-        public void ConstructMesh()
+        public void ConstructMesh(int[] triangles)
         {
             Profiler.BeginSample("ConstructMesh");
 
             var decreasedResolution = resolution - 1;
-            var triangles = new int[decreasedResolution * decreasedResolution * 6];
             var vertices = new Vector3[resolution * resolution];
             var uv = mesh.uv.Length == vertices.Length ? mesh.uv : new Vector2[vertices.Length];
 
             Profiler.BeginSample("ConstructMesh_Loop");
 
-            var triangleVertexIndex = 0;
             for (var y = 0; y < resolution; y++)
             {
                 var yResolution = y * resolution;
@@ -34,14 +32,6 @@ namespace Planet.Generation_Methods.Singlethreaded
                 {
                     var i = x + yResolution;
                     GenerateUvAndVertex(i, x, y, vertices, uv);
-
-                    if (y == decreasedResolution)
-                    {
-                        continue;
-                    }
-
-                    SetCell(triangles, i, triangleVertexIndex);
-                    triangleVertexIndex += TrianglesStep;
                 }
 
                 GenerateUvAndVertex(decreasedResolution + y * resolution, decreasedResolution, y, vertices, uv);

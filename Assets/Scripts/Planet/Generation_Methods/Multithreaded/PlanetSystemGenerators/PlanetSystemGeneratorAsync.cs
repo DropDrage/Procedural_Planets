@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Planet_System;
 using Planet.Common;
 using Planet.Settings.Generation;
 using UnityEngine;
@@ -33,7 +34,7 @@ namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
             Time.timeScale = 0;
             Random.InitState(seed);
 
-            var planetSystem = SpawnUtils.SpawnPrefab(planetSystemPrefab).GetComponent<PlanetSystem>();
+            var planetSystem = SpawnUtils.SpawnPrefab(planetSystemPrefab).GetComponent<BasePlanetSystem>();
             planetSystem.enabled = false;
             var systemName = GenerateSystemName(planetSystem.gameObject);
             var planetSystemTransform = planetSystem.transform;
@@ -55,9 +56,9 @@ namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
             PlaceBodiesOnOrbits(orderedBodies, planetSystemTransform, sun,
                 sunParametersGenerator.parameters.planetRadiusRange.to, systemName);
 
-            planetSystem.enabled = true;
             orderedBodies.Add(sun);
-            planetSystem.bodies = orderedBodies.ToArray();
+            planetSystem.Bodies = orderedBodies.ToArray();
+            planetSystem.enabled = true;
 
             Time.timeScale = 1;
 
