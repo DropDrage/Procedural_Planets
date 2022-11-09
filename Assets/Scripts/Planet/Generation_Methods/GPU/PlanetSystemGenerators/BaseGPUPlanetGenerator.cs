@@ -4,6 +4,7 @@ using Planet.Settings;
 using Planet.Settings.Generation;
 using UnityEngine;
 using Utils;
+using Utils.Extensions;
 using Random = System.Random;
 
 namespace Planet.Generation_Methods.GPU.PlanetSystemGenerators
@@ -92,10 +93,12 @@ namespace Planet.Generation_Methods.GPU.PlanetSystemGenerators
         {
             var planetRigidbody = planet.GetComponent<Rigidbody>();
             planetRigidbody.mass = planet.shapeSettings.planetRadius
-                                   * planet.shapeSettings.planetRadius
-                                   * parameters.massMultiplierRange.GetRandomValue(random);
-            planetRigidbody.AddTorque(random.OnUnitSphere() * parameters.angularVelocityRange.GetRandomValue(random),
-                ForceMode.VelocityChange);
+                * planet.shapeSettings.planetRadius
+                * parameters.massMultiplierRange.GetRandomValue(random);
+            planetRigidbody.AddTorque(
+                random.OnUnitSphere() * parameters.angularVelocityRange.GetRandomValue(random),
+                ForceMode.VelocityChange
+            );
         }
 
         private void GenerateColor(Planet planet, Random random)

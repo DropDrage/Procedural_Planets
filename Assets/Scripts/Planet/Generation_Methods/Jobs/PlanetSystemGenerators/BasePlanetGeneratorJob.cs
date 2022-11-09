@@ -5,6 +5,7 @@ using Planet.Settings;
 using Planet.Settings.Generation;
 using UnityEngine;
 using Utils;
+using Utils.Extensions;
 using static Utils.AsyncUtils;
 using Random = System.Random;
 
@@ -22,21 +23,25 @@ namespace Planet.Generation_Methods.Jobs.PlanetSystemGenerators
 
             var planetGenerator = new TGenerator();
 
-            await RunAsyncWithScheduler(() =>
-            {
-                planetObject = SpawnUtils.SpawnPrefab(prefab);
-                planet = planetObject.GetComponent<Planet>();
-                gravityBody = planetObject.GetComponent<GravityBody>();
-            }, mainScheduler);
+            await RunAsyncWithScheduler(
+                () =>
+                {
+                    planetObject = SpawnUtils.SpawnPrefab(prefab);
+                    planet = planetObject.GetComponent<Planet>();
+                    gravityBody = planetObject.GetComponent<GravityBody>();
+                }, mainScheduler
+            );
 
             var mainRandom = new Random(seed);
             var colorRandom = new Random(seed);
 
-            var shapeTask = Task.Run(async () =>
-            {
-                await GenerateShape(planet, planetGenerator, mainRandom, mainScheduler);
-                await RunAsyncWithScheduler(() => CalculateGravity(planet, mainRandom), mainScheduler);
-            });
+            var shapeTask = Task.Run(
+                async () =>
+                {
+                    await GenerateShape(planet, planetGenerator, mainRandom, mainScheduler);
+                    await RunAsyncWithScheduler(() => CalculateGravity(planet, mainRandom), mainScheduler);
+                }
+            );
             var colorTask = GenerateColor(planet, colorRandom, mainScheduler);
 
             Task.WaitAll(shapeTask, colorTask);
@@ -106,18 +111,22 @@ namespace Planet.Generation_Methods.Jobs.PlanetSystemGenerators
             planetRigidbody.mass = planet.shapeSettings.planetRadius
                 * planet.shapeSettings.planetRadius
                 * parameters.massMultiplierRange.GetRandomValue(random);
-            planetRigidbody.AddTorque(random.OnUnitSphere() * parameters.angularVelocityRange.GetRandomValue(random),
-                ForceMode.VelocityChange);
+            planetRigidbody.AddTorque(
+                random.OnUnitSphere() * parameters.angularVelocityRange.GetRandomValue(random),
+                ForceMode.VelocityChange
+            );
         }
 
         private async Task GenerateColor(Planet planet, Random random, TaskScheduler main)
         {
-            var colorSettings = planet.colorSettings = await RunAsyncWithScheduler(() =>
-            {
-                var color = ScriptableObject.CreateInstance<ColorSettings>();
-                color.planetMaterial = new Material(shader);
-                return color;
-            }, main);
+            var colorSettings = planet.colorSettings = await RunAsyncWithScheduler(
+                () =>
+                {
+                    var color = ScriptableObject.CreateInstance<ColorSettings>();
+                    color.planetMaterial = new Material(shader);
+                    return color;
+                }, main
+            );
             colorSettings.biomeColorSettings = GenerateBiomeSettingsAsync(random);
             colorSettings.oceanGradient = GenerateOceanGradientAsync(random);
         }

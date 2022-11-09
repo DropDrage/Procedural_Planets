@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
-using Utils;
+using Utils.Extensions;
 
 namespace Planet.Common
 {

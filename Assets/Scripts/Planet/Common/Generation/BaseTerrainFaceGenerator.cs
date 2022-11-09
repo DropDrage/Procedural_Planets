@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace Planet.Common.Generation
     public abstract class BaseTerrainFaceGenerator
     {
         private const int TrianglesStep = 6;
+        private const int TrianglesSidesCount = 3;
 
         protected readonly ShapeGenerator shapeGenerator;
 
@@ -64,15 +66,77 @@ namespace Planet.Common.Generation
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void GenerateUvAndVertex(int i, int x, int y, IList<Vector3> vertices, Vector2[] uv)
         {
+            Profiler.BeginSample(nameof(GenerateUvAndVertex));
+
             var pointOnUnitSphere = GeneratePointOnUnitSphere(x, y);
             var unscaledElevation = shapeGenerator.CalculateUnscaledElevation(pointOnUnitSphere);
 
             vertices[i] = CalculateVertex(pointOnUnitSphere, unscaledElevation);
             uv[i].y = unscaledElevation;
+
+            Profiler.EndSample();
         }
 
         protected virtual Vector3 CalculateVertex(Vector3 pointOnUnitSphere, float unscaledElevation) =>
             pointOnUnitSphere * shapeGenerator.GetScaledElevation(unscaledElevation);
+
+
+        #region Normals Manual Calculation
+
+        [Obsolete("Much slower than mesh.RecalculateNormals")]
+        protected Vector3[] CalculateNormals(Vector3[] vertices)
+        {
+            var decreasedResolution = resolution - 1;
+            var normals = new Vector3[vertices.Length];
+            for (int i = 0, cellsCount = normals.Length - resolution; i < cellsCount; i++)
+            {
+                if (i % resolution != decreasedResolution)
+                {
+                    var cellStartIndex = i;
+                    var cellNormals = CalculateNormal(vertices, cellStartIndex, resolution);
+                    AddNormals(normals, ref cellNormals, cellStartIndex, resolution);
+                }
+            }
+
+            foreach (var normal in normals)
+            {
+                normal.Normalize();
+            }
+
+            return normals;
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static (Vector3 normal1, Vector3 normal2) CalculateNormal(Vector3[] vertices, int cellStartIndex,
+            int resolution)
+        {
+            ref Vector3 a = ref vertices[cellStartIndex],
+                b = ref vertices[cellStartIndex + resolution + 1],
+                c = ref vertices[cellStartIndex + resolution];
+
+            Vector3 sideAb = b - a, sideAc = c - a;
+            var normal1 = Vector3.Cross(sideAb, sideAc).normalized;
+
+            ref var c2 = ref vertices[cellStartIndex + 1]; // 1
+            var sideAc2 = a - c2;
+            var normal2 = Vector3.Cross(sideAb, sideAc2).normalized;
+
+            return (normal1, normal2);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void AddNormals(IList<Vector3> normals, ref (Vector3 normal1, Vector3 normal2) cellNormals,
+            int cellStartIndex, int resolution)
+        {
+            var normalsSum = cellNormals.normal1 + cellNormals.normal2;
+            normals[cellStartIndex] += normalsSum;
+            normals[cellStartIndex + resolution + 1] += normalsSum;
+            normals[cellStartIndex + resolution] += cellNormals.normal1;
+
+            normals[cellStartIndex + 1] += cellNormals.normal2;
+        }
+
+        #endregion
 
 
         public static int[] GetTriangles(int resolution)

@@ -4,9 +4,8 @@ using Planet;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
-using UnityEngine;
+using Unity.Mathematics;
 using Utils;
-using Utils.Extensions;
 
 namespace Planet_System
 {
@@ -21,14 +20,14 @@ namespace Planet_System
                 ReleaseNativeArrays();
 
                 _masses = new NativeArray<float>(value.Select(body => body.Mass).ToArray(), Allocator.Persistent);
-                _positions = new NativeArray<Vector3>(value.Length, Allocator.Persistent);
-                _attractions = new NativeArray<Vector3>(value.Length, Allocator.Persistent);
+                _positions = new NativeArray<float3>(value.Length, Allocator.Persistent);
+                _attractions = new NativeArray<float3>(value.Length, Allocator.Persistent);
             }
         }
 
         private NativeArray<float> _masses;
-        private NativeArray<Vector3> _positions;
-        private NativeArray<Vector3> _attractions;
+        private NativeArray<float3> _positions;
+        private NativeArray<float3> _attractions;
 
 
         private void FixedUpdate()
@@ -53,8 +52,6 @@ namespace Planet_System
                 }
             }
         }
-
-
 
         private void OnDestroy()
         {
@@ -84,16 +81,16 @@ namespace Planet_System
         private struct AttractionJob : IJobParallelFor
         {
             [ReadOnly]
-            private readonly NativeArray<Vector3> _positions;
+            private readonly NativeArray<float3> _positions;
             [ReadOnly]
             private readonly NativeArray<float> _masses;
 
             [WriteOnly]
-            public NativeArray<Vector3> attractions;
+            public NativeArray<float3> attractions;
 
 
-            public AttractionJob(NativeArray<Vector3> positions, NativeArray<float> masses,
-                NativeArray<Vector3> attractions)
+            public AttractionJob(NativeArray<float3> positions, NativeArray<float> masses,
+                NativeArray<float3> attractions)
             {
                 _positions = positions;
                 _masses = masses;
@@ -103,7 +100,7 @@ namespace Planet_System
 
             public void Execute(int index)
             {
-                var attraction = Vector3.zero;
+                var attraction = float3.zero;
                 var attractedBodyPosition = _positions[index];
                 var attractedBodyMass = _masses[index];
 
@@ -111,16 +108,18 @@ namespace Planet_System
                 {
                     if (i != index)
                     {
-                        var distance = _positions[i] - attractedBodyPosition;
-                        var sqrDistance = distance.sqrMagnitude;
+                        var position = _positions[i];
+                        var normalizedDistance = math.normalize(position - attractedBodyPosition);
+                        var sqrDistance = math.distancesq(position, attractedBodyPosition);
                         var attractionMagnitude = Universe.GravitationConstant
                             * attractedBodyMass * _masses[i]
                             / sqrDistance;
-                        var attractionForce = distance.normalized * attractionMagnitude;
+                        var attractionForce = normalizedDistance * attractionMagnitude;
 
-                        attraction.Add(ref attractionForce);
+                        attraction += attractionForce;
                     }
                 }
+
                 attractions[index] = attraction;
             }
         }

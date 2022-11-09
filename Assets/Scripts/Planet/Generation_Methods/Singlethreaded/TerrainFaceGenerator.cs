@@ -24,7 +24,9 @@ namespace Planet.Generation_Methods.Singlethreaded
             mesh.Clear();
             mesh.vertices = vertices;
             mesh.triangles = triangles;
+            Profiler.BeginSample("RecalculateNormals");
             mesh.RecalculateNormals();
+            Profiler.EndSample();
             mesh.uv = uv;
 
             Profiler.EndSample();

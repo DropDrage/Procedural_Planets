@@ -4,7 +4,7 @@ namespace Noise
 {
     public class SimpleNoiseFilter : NoiseFilterAbstract
     {
-        private NoiseSettings.SimpleNoiseSettings _settings;
+        private readonly NoiseSettings.SimpleNoiseSettings _settings;
 
 
         public SimpleNoiseFilter(NoiseSettings.SimpleNoiseSettings settings)
@@ -21,7 +21,7 @@ namespace Noise
 
             for (var i = 0; i < _settings.layersCount; i++)
             {
-                var noise = Noise.Evaluate(point * frequency + _settings.center);
+                var noise = noiseGenerator.Evaluate(point * frequency + _settings.center);
                 noiseValue += (noise + 1) * .5f * amplitude;
                 frequency *= _settings.roughness;
                 amplitude *= _settings.persistence;

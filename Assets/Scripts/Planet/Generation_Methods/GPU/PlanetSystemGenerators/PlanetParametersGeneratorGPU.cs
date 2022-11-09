@@ -1,7 +1,7 @@
 using Planet.Settings;
 using Planet.Settings.Generation;
 using UnityEngine;
-using Utils;
+using Utils.Extensions;
 
 namespace Planet.Generation_Methods.GPU.PlanetSystemGenerators
 {
@@ -22,13 +22,16 @@ namespace Planet.Generation_Methods.GPU.PlanetSystemGenerators
                 var gradient = new Gradient {colorKeys = colorKeys};
                 biomes[i] = new ColorSettings.BiomeColorSettings.Biome(
                     gradient, random.ColorHSV(0, 1f, 0.1f, 0.825f),
-                    random.NextFloat(), random.NextFloat(0.2f));
+                    random.NextFloat(), random.NextFloat(0.2f)
+                );
             }
 
-            return new ColorSettings.BiomeColorSettings(biomes, GenerateNoiseSettings(random),
+            return new ColorSettings.BiomeColorSettings(
+                biomes, GenerateNoiseSettings(random),
                 parameters.biomeNoiseOffsetRange.GetRandomValue(random),
                 parameters.biomeStrengthRange.GetRandomValue(random),
-                parameters.biomeBlendRange.GetRandomValue(random));
+                parameters.biomeBlendRange.GetRandomValue(random)
+            );
         }
 
         protected override Gradient GenerateOceanGradientAsync(System.Random random)

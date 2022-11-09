@@ -22,7 +22,7 @@ namespace Noise
 
             for (var i = 0; i < _settings.layersCount; i++)
             {
-                var noise = 1 - Mathf.Abs(Noise.Evaluate(point * frequency + _settings.center));
+                var noise = 1 - Mathf.Abs(base.noiseGenerator.Evaluate(point * frequency + _settings.center));
                 weight = noise *= noise * weight;
 
                 noiseValue += noise * amplitude;

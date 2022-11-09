@@ -14,10 +14,13 @@ namespace Editor
         {
             base.OnInspectorGUI();
 
+            GUILayout.Space(10);
+            GUI.enabled = Application.isPlaying;
             if (GUILayout.Button("Generate"))
             {
                 _generator.Generate();
             }
+            GUI.enabled = true;
         }
 
 

@@ -28,6 +28,7 @@ namespace Planet
         private void Awake()
         {
             _rb = GetComponent<Rigidbody>();
+            _transform = transform;
         }
 
         private void OnEnable()
@@ -39,8 +40,7 @@ namespace Planet
         {
             radius = GetComponent<Planet>().shapeSettings.planetRadius;
             gameObject.name = bodyName;
-            _rb.AddForce(initialVelocity, ForceMode.VelocityChange);
-            _transform = transform;
+            _rb.velocity = initialVelocity;
         }
 
 

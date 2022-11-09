@@ -2,7 +2,7 @@ using Noise;
 using Planet.Settings;
 using Planet.Settings.Generation;
 using UnityEngine;
-using Utils;
+using Utils.Extensions;
 
 namespace Planet.Generation_Methods.Multithreaded.PlanetSystemGenerators
 {

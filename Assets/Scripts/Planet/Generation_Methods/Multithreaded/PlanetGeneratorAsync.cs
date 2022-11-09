@@ -10,8 +10,8 @@ namespace Planet.Generation_Methods.Multithreaded
     {
         private const int SidesCount = 6;
 
-        protected readonly ShapeGenerator shapeGenerator = new();
-        private readonly ColorGeneratorAsync _colorGenerator = new();
+        protected readonly ShapeGenerator shapeGenerator = new ();
+        private readonly ColorGeneratorAsync _colorGenerator = new ();
 
         public int resolution = 10;
 
@@ -31,12 +31,6 @@ namespace Planet.Generation_Methods.Multithreaded
             shapeGenerator.UpdateSettings(planet.shapeSettings);
             await _colorGenerator.UpdateSettings(planet.colorSettings, main);
 
-            if (planet.sphereCollider == null)
-            {
-                planet.sphereCollider =
-                    await RunAsyncWithScheduler(planet.gameObject.AddComponent<SphereCollider>, main);
-            }
-
             var meshFilters = new MeshFilter[SidesCount];
             _terrainFaces = new TerrainFaceGeneratorAsync[SidesCount];
 
@@ -50,28 +44,31 @@ namespace Planet.Generation_Methods.Multithreaded
             {
                 Mesh sharedMesh = null;
                 MeshRenderer meshRenderer = null;
-                await RunAsyncWithScheduler(() =>
-                {
-                    var meshObj = new GameObject($"mesh{(FaceRenderMask) i + 1}");
-                    var meshObjTransform = meshObj.transform;
-                    meshObjTransform.parent = myTransform;
-                    meshObjTransform.position = myTransform.position;
+                await RunAsyncWithScheduler(
+                    () =>
+                    {
+                        var meshObj = new GameObject($"mesh{(FaceRenderMask) i + 1}");
+                        var meshObjTransform = meshObj.transform;
+                        meshObjTransform.parent = myTransform;
+                        meshObjTransform.position = myTransform.position;
 
-                    meshRenderer = meshObj.AddComponent<MeshRenderer>();
-                    meshFilters[i] = meshObj.AddComponent<MeshFilter>();
-                    sharedMesh = meshFilters[i].sharedMesh = new Mesh();
-                }, main);
+                        meshRenderer = meshObj.AddComponent<MeshRenderer>();
+                        meshFilters[i] = meshObj.AddComponent<MeshFilter>();
+                        sharedMesh = meshFilters[i].sharedMesh = new Mesh();
+                    }, main
+                );
 
                 await RunAsyncWithScheduler(
                     () => meshRenderer.sharedMaterial = planet.colorSettings.planetMaterial,
-                    main);
+                    main
+                );
 
                 _terrainFaces[i] = CreateTerrainFace(sharedMesh, directions[i]);
             }
         }
 
         protected virtual TerrainFaceGeneratorAsync CreateTerrainFace(Mesh sharedMesh, Vector3 direction) =>
-            new(shapeGenerator, sharedMesh, resolution, direction);
+            new (shapeGenerator, sharedMesh, resolution, direction);
 
 
         private async Task GenerateMesh(Planet planet, TaskScheduler main)
@@ -84,11 +81,13 @@ namespace Planet.Generation_Methods.Multithreaded
             }
             Task.WaitAll(constructMeshTasks);
 
-            await RunAsyncWithScheduler(() =>
-            {
-                _colorGenerator.UpdateElevation(shapeGenerator.elevationMinMax);
-                OnRadiusCalculated(planet, CalculateRadius(planet));
-            }, main);
+            await RunAsyncWithScheduler(
+                () =>
+                {
+                    _colorGenerator.UpdateElevation(shapeGenerator.elevationMinMax);
+                    OnRadiusCalculated(planet, CalculateRadius(planet));
+                }, main
+            );
         }
 
 
@@ -114,7 +113,8 @@ namespace Planet.Generation_Methods.Multithreaded
 
             await RunAsyncWithScheduler(
                 () => planet.trailRenderer.colorGradient = planet.colorSettings.oceanGradient,
-                main);
+                main
+            );
         }
     }
 }
